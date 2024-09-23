@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 function Header() {
   return (
-    <header className="bg-white container mx-auto">
+    <header className="bg-white w-full mx-auto sticky top-0 px-9">
       <div className="flex justify-between items-center">
         <div>
           <a href="/">
