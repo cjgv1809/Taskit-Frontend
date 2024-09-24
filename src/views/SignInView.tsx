@@ -11,7 +11,7 @@ function SignInView() {
     <>
       <Header />
       <main className="flex items-center gap-10">
-        <div className="bg-[#F7F6F6] flex-1">
+        <div className="bg-[#F7F6F6] flex-1 hidden md:block">
           <svg
             width="485"
             height="485"
@@ -131,18 +131,21 @@ function SignInView() {
             <Button variant="default" size="lg">
               Iniciar sesion
             </Button>
-            <Link to="" className="text-end font-medium text-lg">
+            <Link
+              to=""
+              className="text-center md:text-right font-medium text-lg"
+            >
               ¿Olvidaste tu contraseña?
             </Link>
           </form>
           <div className="flex items-center my-4">
-            <Separator className="my-4 w-1/3" />
-            <span className="w-1/3 text-nowrap text-center font-medium text-lg">
+            <Separator className="my-4 w-1/4 md:w-1/3" />
+            <span className="w-1/2 md:w-1/3 text-nowrap text-center font-medium text-lg">
               O continuar con
             </span>
-            <Separator className="my-4 w-1/3" />
+            <Separator className="my-4 w-1/4 md:w-1/3" />
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-4 mb-4">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
             <Button
               size="lg"
               className="bg-white shadow-md flex-grow hover:bg-gray-100"
@@ -160,7 +163,7 @@ function SignInView() {
           </div>
           <p className="text-center font-medium text-lg">
             ¿No tienes cuenta?{" "}
-            <Link to="/register" className="underline underline-offset-4">
+            <Link to="/sign-up" className="underline underline-offset-4">
               Regístrate
             </Link>
           </p>

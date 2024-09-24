@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeView />} />
         <Route path="/sign-in" element={<SignInView />} />
-        <Route path="/register" element={<RegisterView />} />
+        <Route path="/sign-up" element={<RegisterView />} />
         <Route path="*" element={<NotFoundView />} />
       </Routes>
     </>

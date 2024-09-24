@@ -320,7 +320,7 @@ function FeaturedCharacteristics() {
   return (
     <section className="bg-accent py-16 px-4">
       <div className="container mx-auto">
-        <h2 className="text-6xl font-bold mb-10 text-white text-center">
+        <h2 className="text-4xl md:text-6xl font-bold mb-10 text-white text-center">
           Características Destacadas
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

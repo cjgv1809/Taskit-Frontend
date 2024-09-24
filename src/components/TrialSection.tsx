@@ -6,8 +6,8 @@ function TrialSection() {
     <section className="bg-secondary text-white py-16 px-4">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
         <div className="text-center">
-          <h2 className="text-7xl font-bold mb-6">¡Prueba Taskit Hoy!</h2>
-          <p className="text-2xl font-semibold mb-8">
+          <h2 className="text-5xl md:text-7xl font-bold mb-6 text-balance">¡Prueba Taskit Hoy!</h2>
+          <p className="text-lg md:text-2xl font-semibold mb-8 text-pretty">
             Comienza gratis. No se requiere tarjeta de crédito.
           </p>
           <Button variant="default" size="lg">

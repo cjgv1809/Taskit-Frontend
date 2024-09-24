@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 function Header() {
@@ -5,7 +6,7 @@ function Header() {
     <header className="bg-white w-full mx-auto sticky top-0 px-9">
       <div className="flex justify-between items-center">
         <div>
-          <a href="/">
+          <Link to="/">
             <svg
               width="276"
               height="89"
@@ -43,14 +44,14 @@ function Header() {
                 fill="#F5684E"
               />
             </svg>
-          </a>
+          </Link>
         </div>
-        <div className="flex gap-4 items-center">
-          <Button variant="outline" size="lg">
-            Iniciar sesion
+        <div className="hidden md:flex gap-4 items-center">
+          <Button variant="outline" size="lg" asChild>
+            <Link to="/sign-in">Iniciar Sesión</Link>
           </Button>
-          <Button variant="default" size="lg">
-            Registrarse
+          <Button variant="default" size="lg" asChild>
+            <Link to="/sign-up">Registrarse</Link>
           </Button>
         </div>
       </div>
