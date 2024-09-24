@@ -10,12 +10,12 @@ function SignInView() {
   return (
     <>
       <Header />
-      <main className="flex items-center gap-10">
+      <main className="flex items-center gap-10 mt-20">
         <div className="bg-[#F7F6F6] flex-1 hidden md:block">
           <svg
-            width="485"
-            height="485"
-            viewBox="0 0 485 485"
+            width="385"
+            height="585"
+            viewBox="0 0 425 585"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -102,7 +102,7 @@ function SignInView() {
           </svg>
         </div>
         <div className="flex-1 p-9">
-          <h1 className="text-6xl font-bold text-center text-typography">
+          <h1 className="text-4xl md:text-6xl font-bold text-center text-typography">
             Iniciar Sesión
           </h1>
           <form className="mt-6 flex flex-col space-y-4">

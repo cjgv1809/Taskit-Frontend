@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 function Header() {
   return (
-    <header className="bg-white w-full mx-auto sticky top-0 px-9">
+    <header className="bg-white w-full mx-auto fixed top-0 px-9">
       <div className="flex justify-between items-center">
         <div>
           <Link to="/">

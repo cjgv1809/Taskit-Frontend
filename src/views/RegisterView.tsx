@@ -10,12 +10,12 @@ function RegisterView() {
   return (
     <>
       <Header />
-      <main className="flex items-center gap-10">
+      <main className="flex items-center gap-10 mt-20">
         <div className="bg-[#F7F6F6] flex-1 hidden md:block">
           <svg
-            width="704"
-            height="827"
-            viewBox="0 0 704 827"
+            width="604"
+            height="627"
+            viewBox="0 0 604 827"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -171,7 +171,7 @@ function RegisterView() {
           </svg>
         </div>
         <div className="flex-1 p-9">
-          <h1 className="text-6xl font-bold text-center text-typography">
+          <h1 className="text-4xl md:text-6xl font-bold text-center text-typography">
             Registrarse
           </h1>
           <form className="mt-6 flex flex-col space-y-4">
@@ -211,11 +211,11 @@ function RegisterView() {
             </Button>
           </form>
           <div className="flex items-center my-4">
-            <Separator className="my-4 w-1/4" />
-            <span className="w-1/2 text-nowrap text-center font-medium text-lg">
+            <Separator className="my-4 md:w-1/4 w-1/5" />
+            <span className="md:w-1/2 w-9/12 text-nowrap text-center font-medium text-lg">
               O registrarse con
             </span>
-            <Separator className="my-4 w-1/4" />
+            <Separator className="my-4 md:w-1/4 w-1/5" />
           </div>
           <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
             <Button

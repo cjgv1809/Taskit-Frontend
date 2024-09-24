@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 
 function Hero() {
   return (
-    <section className="bg-secondary text-white py-16 px-4">
+    <section className="bg-secondary text-white py-16 px-4 mt-20">
       <div className="container mx-auto flex flex-col md:flex-row md:gap-10 items-center justify-between">
         <div className="md:flex-1 md:block mb-8 md:mb-0 flex flex-col">
           <h1 className="text-5xl md:text-7xl font-bold mb-4 text-balance text-center md:text-left">
