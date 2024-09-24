@@ -111,7 +111,7 @@ function SignInView() {
                 htmlFor="email"
                 className="block text-base font-medium text-gray-600 mb-1"
               >
-                Ingrese su email
+                Email
               </label>
               <Input id="email" type="email" placeholder="Ingrese su email" />
             </div>
@@ -120,7 +120,7 @@ function SignInView() {
                 htmlFor="password"
                 className="block text-base font-medium text-gray-600 mb-1"
               >
-                Ingrese su contraseña
+                Contraseña
               </label>
               <Input
                 id="password"
@@ -129,7 +129,7 @@ function SignInView() {
               />
             </div>
             <Button variant="default" size="lg">
-              Iniciar sesion
+              Iniciar sesión
             </Button>
             <Link
               to=""
