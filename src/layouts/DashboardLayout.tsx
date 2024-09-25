@@ -8,11 +8,11 @@ export default function DashboardLayout() {
 
   useEffect(() => {
     if (isLoaded && !userId) {
-      navigate("/sign-in");
+      navigate("/sign-in"); // Redirect if user is not authenticated
     }
-  }, [isLoaded]);
+  }, [isLoaded, userId, navigate]); // Added userId to dependencies
 
-  if (!isLoaded) return "Loading...";
+  if (!isLoaded) return <div>Loading...</div>; // Improve loading UI
 
-  return <Outlet />;
+  return <Outlet />; // Render child routes
 }
