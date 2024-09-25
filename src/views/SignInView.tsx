@@ -1,14 +1,19 @@
 import { Link } from "react-router-dom";
 import { SignIn } from "@clerk/clerk-react";
+import { useRedirectIfAuthenticated } from "@/hooks";
 // import { FaGoogle, FaFacebook } from "react-icons/fa";
 // import { Button } from "@/components/ui/button";
 // import { Input } from "@/components/ui/input";
 // import { Separator } from "@/components/ui/separator";
 
 function SignInView() {
+  const isLoading = useRedirectIfAuthenticated();
+
+  if (isLoading) return <div>Loading...</div>; // Show loading while auth state is determined
+
   return (
     <>
-      <main className="flex items-center gap-10 mt-20">
+      <main className="flex items-center md:gap-10">
         <div className="bg-[#F7F6F6] flex-1 hidden md:block">
           <svg
             width="385"
@@ -99,7 +104,7 @@ function SignInView() {
             />
           </svg>
         </div>
-        <div className="flex-1 p-9 flex flex-col justify-center items-center">
+        <div className="flex-1 p-4 md:p-9 flex flex-col justify-center items-center">
           <h1 className="text-4xl md:text-6xl font-bold text-center text-typography">
             Iniciar Sesión
           </h1>
