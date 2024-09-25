@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { SignUp } from "@clerk/clerk-react";
+// import { FaGoogle, FaFacebook } from "react-icons/fa";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Separator } from "@/components/ui/separator";
 
 function RegisterView() {
   return (
     <>
-      <Header />
       <main className="flex items-center gap-10 mt-20">
         <div className="bg-[#F7F6F6] flex-1 hidden md:block">
           <svg
@@ -170,11 +168,11 @@ function RegisterView() {
             />
           </svg>
         </div>
-        <div className="flex-1 p-9">
+        <div className="flex-1 p-9 flex flex-col justify-center items-center">
           <h1 className="text-4xl md:text-6xl font-bold text-center text-typography">
             Registrarse
           </h1>
-          <form className="mt-6 flex flex-col space-y-4">
+          {/* <form className="mt-6 flex flex-col space-y-4">
             <div>
               <label
                 htmlFor="name"
@@ -209,15 +207,15 @@ function RegisterView() {
             <Button variant="default" size="lg">
               Registrarse
             </Button>
-          </form>
-          <div className="flex items-center my-4">
+          </form> */}
+          {/* <div className="flex items-center my-4">
             <Separator className="my-4 md:w-1/4 w-1/5" />
             <span className="md:w-1/2 w-9/12 text-nowrap text-center font-medium text-lg">
               O registrarse con
             </span>
             <Separator className="my-4 md:w-1/4 w-1/5" />
-          </div>
-          <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+          </div> */}
+          {/* <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
             <Button
               size="lg"
               className="bg-white shadow-md flex-grow hover:bg-gray-100"
@@ -232,6 +230,9 @@ function RegisterView() {
               <FaFacebook className="mr-3" size={20} />
               <span className="text-xl">Facebook</span>
             </Button>
+          </div> */}
+          <div className="my-4">
+            <SignUp path="/sign-up" />
           </div>
           <p className="text-center font-medium text-lg">
             ¿Ya tienes cuenta?{" "}
@@ -241,7 +242,6 @@ function RegisterView() {
           </p>
         </div>
       </main>
-      <Footer />
     </>
   );
 }
