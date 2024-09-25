@@ -61,8 +61,8 @@ function DashboardView() {
               </li>
             </ul>
           </nav>
-          <div className="absolute bottom-4 left-4 border-t w-40">
-            <img src="images/Logo.svg" alt="Taskit Logo" className="w-full" />
+          <div className="absolute bottom-4 left-0 border-t w-full flex justify-center">
+            <img src="images/Logo.svg" alt="Taskit Logo" className="w-40" />
           </div>
         </aside>
 
@@ -82,9 +82,9 @@ function DashboardView() {
 
             <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
               <img
-                src="images/Imagen-Home.svg"
-                alt="Illustration"
-                className="w-48 h-48 mx-auto mb-4"
+                src="images/dashboard-image.webp"
+                alt="Dashboard Image"
+                className="w-48 h-auto mx-auto"
               />
             </div>
 
