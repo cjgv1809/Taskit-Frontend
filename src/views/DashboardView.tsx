@@ -61,8 +61,8 @@ function DashboardView() {
               </li>
             </ul>
           </nav>
-          <div className="absolute bottom-4 left-4 border-t">
-            <img src="images/Logo.svg" alt="Taskit Logo" className="w-40" />
+          <div className="absolute bottom-4 left-4 border-t w-40">
+            <img src="images/Logo.svg" alt="Taskit Logo" className="w-full" />
           </div>
         </aside>
 
