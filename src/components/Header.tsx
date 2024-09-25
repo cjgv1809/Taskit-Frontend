@@ -6,7 +6,7 @@ function Header() {
   return (
     <header className="bg-white border-b w-full mx-auto sticky top-0 px-9 z-50">
       <div className="flex justify-between items-center">
-        <div>
+        <div className="mx-auto md:mx-0">
           <Link to="/">
             <svg
               width="276"
