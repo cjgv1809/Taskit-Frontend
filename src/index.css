@@ -74,3 +74,7 @@
     @apply bg-background text-foreground overflow-x-hidden max-w-7xl mx-auto min-h-screen;
   }
 }
+
+#root {
+  @apply grid grid-rows-[auto,1fr,auto] min-h-screen;
+}

@@ -329,7 +329,7 @@ function FeaturedCharacteristics() {
               key={feature.id}
               className="bg-primary text-typography p-6 rounded-4xl shadow-md"
             >
-              <div className="flex justify-center mx-auto w-48">
+              <div className="flex justify-center mx-auto">
                 {feature.icon}
               </div>
               <h3 className="text-2xl font-semibold text-center mb-2">

@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 function Header() {
   return (
-    <header className="bg-white w-full mx-auto fixed top-0 px-9">
+    <header className="bg-white border-b w-full mx-auto sticky top-0 px-9 z-50">
       <div className="flex justify-between items-center">
         <div>
           <Link to="/">
@@ -47,12 +48,19 @@ function Header() {
           </Link>
         </div>
         <div className="hidden md:flex gap-4 items-center">
-          <Button variant="outline" size="lg" asChild>
-            <Link to="/sign-in">Iniciar Sesión</Link>
-          </Button>
-          <Button variant="default" size="lg" asChild>
-            <Link to="/sign-up">Registrarse</Link>
-          </Button>
+          <SignedIn>
+            <Button variant="default" size="lg" asChild>
+              <Link to="/dashboard">Dashboard</Link>
+            </Button>
+          </SignedIn>
+          <SignedOut>
+            <Button variant="outline" size="lg" asChild>
+              <Link to="/sign-in">Iniciar Sesión</Link>
+            </Button>
+            <Button variant="default" size="lg" asChild>
+              <Link to="/sign-up">Registrarse</Link>
+            </Button>
+          </SignedOut>
         </div>
       </div>
     </header>
