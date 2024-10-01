@@ -59,10 +59,12 @@ export default function RootLayout() {
   return (
     <ClerkProvider
       publishableKey={PUBLISHABLE_KEY}
-      afterSignOutUrl="/"
+      localization={localization}
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
-      localization={localization}
+      afterSignInUrl="/dashboard"
+      afterSignUpUrl="/dashboard"
+      afterSignOutUrl="/"
     >
       <SignedOut>
         <Header />
