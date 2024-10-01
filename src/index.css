@@ -71,7 +71,7 @@
     @apply overflow-x-hidden;
   }
   body {
-    @apply bg-background text-foreground overflow-x-hidden max-w-7xl mx-auto min-h-screen;
+    @apply min-h-screen mx-auto overflow-x-hidden max-w-[1400px] bg-background text-foreground;
   }
 }
 
