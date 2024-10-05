@@ -13,8 +13,8 @@ const BrowserRouter = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <HomeView /> },
-      { path: "sign-in", element: <SignInView /> },
       { path: "sign-up", element: <RegisterView /> },
+      { path: "sign-in", element: <SignInView /> },
       {
         path: "dashboard",
         element: <DashboardLayout />, // This is now the protected route
