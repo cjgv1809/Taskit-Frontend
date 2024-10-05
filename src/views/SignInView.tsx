@@ -1,24 +1,79 @@
-import { Link } from "react-router-dom";
-import { SignIn } from "@clerk/clerk-react";
-import { useRedirectIfAuthenticated } from "@/hooks";
-// import { FaGoogle, FaFacebook } from "react-icons/fa";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  loginWithEmailAndPassword,
+  loginWithFacebook,
+  loginWithGoogle,
+} from "@/services";
 
 function SignInView() {
-  const isLoading = useRedirectIfAuthenticated();
+  const [userData, setUserData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  if (isLoading) return <div>Loading...</div>; // Show loading while auth state is determined
+  const handleEmailPasswordLogin = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    setError(null); // Reset the error state before login attempt
+
+    try {
+      await loginWithEmailAndPassword(userData.email, userData.password);
+      navigate("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message); // Set the error message from the API
+      } else {
+        setError("An unknown error occurred.");
+      }
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      navigate("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    try {
+      await loginWithFacebook();
+      navigate("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   return (
     <>
       <main className="flex items-center md:gap-10">
         <div className="bg-[#F7F6F6] flex-1 hidden md:block">
           <svg
-            width="385"
+            width="350"
             height="585"
-            viewBox="0 0 425 585"
+            viewBox="0 0 450 585"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -104,70 +159,87 @@ function SignInView() {
             />
           </svg>
         </div>
-        <div className="flex-1 p-4 md:p-9 flex flex-col justify-center items-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-center text-typography">
+        <div className="flex flex-col items-center justify-center flex-1 p-4 md:p-9">
+          <h1 className="text-4xl font-bold text-center md:text-6xl text-typography">
             Iniciar Sesión
           </h1>
-          {/* <form className="mt-6 flex flex-col space-y-4">
+          <form
+            className="flex flex-col w-full mt-6 space-y-4"
+            onSubmit={handleEmailPasswordLogin}
+          >
             <div>
               <label
                 htmlFor="email"
-                className="block text-base font-medium text-gray-600 mb-1"
+                className="block mb-1 text-base font-medium text-gray-600"
               >
                 Email
               </label>
-              <Input id="email" type="email" placeholder="Ingrese su email" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Ingrese su email"
+                value={userData.email}
+                onChange={handleChange}
+              />
             </div>
             <div>
               <label
                 htmlFor="password"
-                className="block text-base font-medium text-gray-600 mb-1"
+                className="block mb-1 text-base font-medium text-gray-600"
               >
                 Contraseña
               </label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Ingrese su contraseña"
+                value={userData.password}
+                onChange={handleChange}
               />
             </div>
-            <Button variant="default" size="lg">
+            <Button variant="default" size="lg" type="submit">
               Iniciar sesión
             </Button>
             <Link
               to=""
-              className="text-center md:text-right font-medium text-lg"
+              className="text-lg font-medium text-center md:text-right"
             >
               ¿Olvidaste tu contraseña?
             </Link>
-          </form> */}
-          {/* <div className="flex items-center my-4">
-            <Separator className="my-4 w-1/4 md:w-1/3" />
-            <span className="w-1/2 md:w-1/3 text-nowrap text-center font-medium text-lg">
+          </form>
+          {/* Display error message */}
+          {error && <p className="error-text">{error}</p>}
+          <div className="flex items-center w-full my-4">
+            <Separator className="w-1/4 my-4 md:w-1/3" />
+            <span className="w-1/2 text-lg font-medium text-center md:w-1/3 text-nowrap">
               O continuar con
             </span>
-            <Separator className="my-4 w-1/4 md:w-1/3" />
-          </div> */}
-          {/* <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+            <Separator className="w-1/4 my-4 md:w-1/3" />
+          </div>
+          <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center">
             <Button
               size="lg"
-              className="bg-white shadow-md flex-grow hover:bg-gray-100"
+              className="flex-grow bg-white shadow-md hover:bg-gray-100"
+              onClick={handleGoogleLogin}
             >
               <FaGoogle className="mr-3" size={20} />
               <span className="text-xl">Google</span>
             </Button>
             <Button
               size="lg"
-              className="bg-blue-500 text-white shadow-md flex-grow hover:bg-blue-700"
+              className="flex-grow text-white bg-blue-500 shadow-md hover:bg-blue-700"
+              onClick={handleFacebookLogin}
             >
               <FaFacebook className="mr-3" size={20} />
               <span className="text-xl">Facebook</span>
             </Button>
-          </div> */}
-          <div className="my-4">
-            <SignIn path="/sign-in" />
           </div>
-          <p className="text-center font-medium text-lg">
+          {/* <div className="my-4">
+            <SignIn path="/sign-in" />
+          </div> */}
+          <p className="text-lg font-medium text-center">
             ¿No tienes cuenta?{" "}
             <Link to="/sign-up" className="underline underline-offset-4">
               Regístrate

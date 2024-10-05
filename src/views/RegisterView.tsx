@@ -1,24 +1,55 @@
-import { Link } from "react-router-dom";
-import { SignUp } from "@clerk/clerk-react";
-import { useRedirectIfAuthenticated } from "@/hooks";
-// import { FaGoogle, FaFacebook } from "react-icons/fa";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Separator } from "@/components/ui/separator";
+import React, { useState } from "react";
+import { registerWithEmailAndPassword } from "@/services";
+import { Link, useNavigate } from "react-router-dom";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 function RegisterView() {
-  const isLoading = useRedirectIfAuthenticated();
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  if (isLoading) return <div>Loading...</div>; // Show loading while auth state is determined
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null); // Reset the error state before registration attempt
+
+    try {
+      await registerWithEmailAndPassword(
+        userData.email,
+        userData.password,
+        userData.name
+      );
+      navigate("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message); // Set the error message from the API
+      } else {
+        setError("An unknown error occurred.");
+      }
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
     <>
       <main className="flex items-center gap-10">
         <div className="bg-[#F7F6F6] flex-1 hidden md:block">
           <svg
-            width="604"
+            width="450"
             height="627"
-            viewBox="0 0 604 827"
+            viewBox="0 0 600 827"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -173,73 +204,95 @@ function RegisterView() {
             />
           </svg>
         </div>
-        <div className="flex-1 p-4 md:p-9 flex flex-col justify-center md:items-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-center text-typography">
+        <div className="flex flex-col justify-center flex-1 p-4 md:p-9 md:items-center">
+          <h1 className="text-4xl font-bold text-center md:text-6xl text-typography">
             Registrarse
           </h1>
-          {/* <form className="mt-6 flex flex-col space-y-4">
+          <form
+            className="flex flex-col w-full mt-6 space-y-4"
+            onSubmit={handleRegister}
+          >
             <div>
               <label
                 htmlFor="name"
-                className="block text-base font-medium text-gray-600 mb-1"
+                className="block mb-1 text-base font-medium text-gray-600"
               >
                 Nombre
               </label>
-              <Input id="name" type="text" placeholder="Ingrese su nombre" />
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Ingrese su nombre"
+                value={userData.name}
+                onChange={handleChange}
+              />
             </div>
             <div>
               <label
                 htmlFor="email"
-                className="block text-base font-medium text-gray-600 mb-1"
+                className="block mb-1 text-base font-medium text-gray-600"
               >
                 Email
               </label>
-              <Input id="email" type="email" placeholder="Ingrese su email" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Ingrese su email"
+                value={userData.email}
+                onChange={handleChange}
+              />
             </div>
             <div>
               <label
                 htmlFor="password"
-                className="block text-base font-medium text-gray-600 mb-1"
+                className="block mb-1 text-base font-medium text-gray-600"
               >
                 Contraseña
               </label>
               <Input
                 id="password"
+                name="password"
                 type="password"
                 placeholder="Ingrese su contraseña"
+                value={userData.password}
+                onChange={handleChange}
               />
             </div>
-            <Button variant="default" size="lg">
+            <Button variant="default" size="lg" type="submit">
               Registrarse
             </Button>
-          </form> */}
-          {/* <div className="flex items-center my-4">
-            <Separator className="my-4 md:w-1/4 w-1/5" />
-            <span className="md:w-1/2 w-9/12 text-nowrap text-center font-medium text-lg">
+          </form>
+          {/* Display error message */}
+          {error && <p className="error-text">{error}</p>}
+          <div className="flex items-center w-full my-4">
+            <Separator className="w-1/5 my-4 md:w-1/4" />
+            <span className="w-9/12 text-lg font-medium text-center md:w-1/2 text-nowrap">
               O registrarse con
             </span>
-            <Separator className="my-4 md:w-1/4 w-1/5" />
-          </div> */}
-          {/* <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+            <Separator className="w-1/5 my-4 md:w-1/4" />
+          </div>
+          <div className="flex flex-col gap-4 mb-4 md:flex-row md:items-center">
             <Button
               size="lg"
-              className="bg-white shadow-md flex-grow hover:bg-gray-100"
+              className="flex-grow bg-white shadow-md hover:bg-gray-100"
             >
               <FaGoogle className="mr-3" size={20} />
               <span className="text-xl">Google</span>
             </Button>
             <Button
               size="lg"
-              className="bg-blue-500 text-white shadow-md flex-grow hover:bg-blue-700"
+              className="flex-grow text-white bg-blue-500 shadow-md hover:bg-blue-700"
             >
               <FaFacebook className="mr-3" size={20} />
               <span className="text-xl">Facebook</span>
             </Button>
-          </div> */}
-          <div className="my-4">
-            <SignUp path="/sign-up" />
           </div>
-          <p className="text-center font-medium text-lg">
+          {/* {/* <div className="my-4">
+            <SignUp path="/sign-up" />
+          </div> */}
+          <p className="text-lg font-medium text-center">
             ¿Ya tienes cuenta?{" "}
             <Link to="/sign-in" className="underline underline-offset-4">
               Inicia sesión
