@@ -1,18 +1,23 @@
-import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "@clerk/clerk-react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "@/hooks";
+import Loading from "@/components/Loading";
 
-export default function DashboardLayout() {
-  const { userId, isLoaded } = useAuth();
-  const navigate = useNavigate();
+function DashboardLayout() {
+  const auth = useAuth();
 
-  useEffect(() => {
-    if (isLoaded && !userId) {
-      navigate("/sign-in"); // Redirect if user is not authenticated
-    }
-  }, [isLoaded, userId, navigate]); // Added userId to dependencies
+  if (!auth) {
+    return <Navigate to="/sign-in" />;
+  }
 
-  if (!isLoaded) return <div>Loading...</div>; // Improve loading UI
+  const { currentUser, loading } = auth;
 
-  return <Outlet />; // Render child routes
+  if (loading) {
+    return <Loading />;
+  }
+
+  console.log(currentUser);
+
+  return currentUser ? <Outlet /> : <Navigate to="/sign-in" />;
 }
+
+export default DashboardLayout;
