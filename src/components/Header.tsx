@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
+import { useAuth } from "@/hooks/useAuth";
 
 function Header() {
+  const { currentUser } = useAuth();
+
   return (
-    <header className="bg-white border-b w-full mx-auto sticky top-0 px-9 z-50">
-      <div className="flex justify-between items-center">
+    <header className="sticky top-0 z-50 w-full mx-auto bg-white border-b px-9">
+      <div className="flex items-center justify-between">
         <div className="mx-auto md:mx-0">
           <Link to="/">
             <svg
@@ -47,20 +49,21 @@ function Header() {
             </svg>
           </Link>
         </div>
-        <div className="hidden md:flex gap-4 items-center">
-          <SignedIn>
+        <div className="items-center hidden gap-4 md:flex">
+          {currentUser ? (
             <Button variant="default" size="lg" asChild>
               <Link to="/dashboard">Dashboard</Link>
             </Button>
-          </SignedIn>
-          <SignedOut>
-            <Button variant="outline" size="lg" asChild>
-              <Link to="/sign-in">Iniciar Sesión</Link>
-            </Button>
-            <Button variant="default" size="lg" asChild>
-              <Link to="/sign-up">Registrarse</Link>
-            </Button>
-          </SignedOut>
+          ) : (
+            <>
+              <Button variant="outline" size="lg" asChild>
+                <Link to="/sign-in">Iniciar Sesión</Link>
+              </Button>
+              <Button variant="default" size="lg" asChild>
+                <Link to="/sign-up">Registrarse</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
