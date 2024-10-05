@@ -1,3 +1,3 @@
-import { useRedirectIfAuthenticated } from "./useRedirectIfAuthenticated";
+import { useAuth } from "./useAuth";
 
-export { useRedirectIfAuthenticated };
+export { useAuth };
