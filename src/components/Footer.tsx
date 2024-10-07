@@ -3,23 +3,23 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-white py-4 px-4 text-center">
-      <div className="px-9 flex flex-col items-center justify-between md:flex-row">
-        <div className="mt-2 flex flex-col space-y-2 items-center md:items-center md:flex-row md:space-x-4 md:space-y-0">
-          <Link to="#" className="text-typography font-normal hover:underline">
+    <footer className="px-4 py-4 text-center bg-white max-w-[1400px] mx-auto w-full">
+      <div className="flex flex-col items-center justify-between px-9 md:flex-row">
+        <div className="flex flex-col items-center mt-2 space-y-2 md:items-center md:flex-row md:space-x-4 md:space-y-0">
+          <Link to="#" className="font-normal text-typography hover:underline">
             Términos y Condiciones
           </Link>
-          <Link to="#" className="text-typography font-normal hover:underline">
+          <Link to="#" className="font-normal text-typography hover:underline">
             Politica de Privacidad
           </Link>
-          <Link to="#" className="text-typography font-normal hover:underline">
+          <Link to="#" className="font-normal text-typography hover:underline">
             FAQ (Preguntas Frecuentes)
           </Link>
-          <Link to="#" className="text-typography font-normal hover:underline">
+          <Link to="#" className="font-normal text-typography hover:underline">
             @{new Date().getFullYear()} Taskit
           </Link>
         </div>
-        <div className="md:mt-2 mt-4 flex items-center gap-4">
+        <div className="flex items-center gap-4 mt-4 md:mt-2">
           <a href="#" className="text-accent hover:underline">
             <BiLogoFacebook size={40} />
           </a>

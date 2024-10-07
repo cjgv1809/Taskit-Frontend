@@ -5,14 +5,20 @@ import Loading from "./Loading";
 
 function Header() {
   const { isAuthenticated, loading } = useVerifySignedInUser();
-  const isDashboard = useLocation().pathname === "/dashboard";
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  // Don't render the header on the dashboard route
+  if (currentPath === "/dashboard") {
+    return null;
+  }
 
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full mx-auto bg-white border-b px-9">
+    <header className="sticky top-0 z-50 w-full mx-auto bg-white border-b px-9 xl:max-w-[1400px] 2xl:max-w-full">
       <div className="flex items-center justify-between">
         <div className="mx-auto md:mx-0">
           <Link to="/">
@@ -56,11 +62,17 @@ function Header() {
           </Link>
         </div>
         <div className="items-center hidden gap-4 md:flex">
-          {isAuthenticated && !isDashboard ? (
+          {isAuthenticated &&
+          (currentPath === "/" ||
+            currentPath === "/sign-up" ||
+            currentPath === "/sign-in") ? (
             <Button variant="default" size="lg" asChild>
               <Link to="/dashboard">Ir a Proyectos</Link>
             </Button>
-          ) : (
+          ) : !isAuthenticated &&
+            (currentPath === "/" ||
+              currentPath === "/sign-up" ||
+              currentPath === "/sign-in") ? (
             <>
               <Button variant="outline" size="lg" asChild>
                 <Link to="/sign-in">Iniciar Sesión</Link>
@@ -69,7 +81,7 @@ function Header() {
                 <Link to="/sign-up">Registrarse</Link>
               </Button>
             </>
-          )}
+          ) : null}
         </div>
       </div>
     </header>
