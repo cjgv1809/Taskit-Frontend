@@ -10,8 +10,8 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { createCategory, getCategoriesByProjectId } from "@/services";
 import { Button } from "./ui/button";
+import { createCategory, getCategoriesByProjectId } from "@/services";
 
 interface CategoryProps {
   projectId: number;

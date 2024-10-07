@@ -1,5 +1,5 @@
-import { useAuth } from "./useAuth";
 import { useEffect, useState } from "react";
+import { useAuth } from "./useAuth";
 
 // Custom Hook to verify signed-in users
 export function useVerifySignedInUser() {

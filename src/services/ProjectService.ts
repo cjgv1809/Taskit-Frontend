@@ -1,5 +1,10 @@
-import { Project } from "@/types";
 import axios from "axios";
+
+interface Project {
+  nombre: string;
+  descripcion: string;
+  id_usuario: number;
+}
 
 interface ProjectResponse {
   id_proyecto: number;
