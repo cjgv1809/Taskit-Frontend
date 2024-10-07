@@ -45,8 +45,6 @@ function DashboardView() {
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  console.log("userId:", userId);
-
   useEffect(() => {
     // fetch projects on component mount
     const handleFetchProjects = async () => {
@@ -83,16 +81,12 @@ function DashboardView() {
         return;
       }
 
-      console.log("Creating new project:", newProject);
-
       const response: ProjectTypeResponse = await createProject(newProject);
 
       const { id_proyecto, message } = response;
-      console.log("Project created:", id_proyecto, message);
 
       // Set project ID and add to projects list
       setProjectId(id_proyecto);
-      console.log("Project ID:==============>>>>", id_proyecto);
 
       if (userId === null) {
         console.error("User ID is null");

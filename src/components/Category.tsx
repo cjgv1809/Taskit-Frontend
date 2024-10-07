@@ -54,8 +54,6 @@ function Category({
         projectId
       );
 
-      console.log("Response:", response);
-
       const { id_categoria, message } = response;
 
       // Set the new category ID
@@ -84,7 +82,7 @@ function Category({
     if (!projectId) return;
 
     const handleFetchCategories = async () => {
-      console.log("Fetching categories for projectId:", projectId);
+
       try {
         const response = await getCategoriesByProjectId(projectId);
         if (response && Array.isArray(response)) {

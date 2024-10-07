@@ -25,15 +25,11 @@ const createProject = async (
       }
     );
 
-    console.log("Full response:", response);
-    console.log("Response data:", response.data);
-
     if (response.status !== 201) {
       throw new Error("Error creating project");
     }
 
     const { id_proyecto, message } = response.data;
-    console.log("Project created:", id_proyecto, message);
 
     return response.data;
   } catch (error) {
@@ -81,8 +77,6 @@ const updateProject = async (projectId: number, name: string) => {
     const requestBody = {
       nombre: name,
     };
-
-    console.log("Updating project name:", projectId, name);
 
     const response = await axios.patch(
       `${import.meta.env.VITE_API_URL}/proyectos/${projectId}`,

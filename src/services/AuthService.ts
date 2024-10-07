@@ -16,11 +16,9 @@ export const registerWithEmailAndPassword = async (
   try {
     // Step 1: Register the user with Firebase
     const result = await createUserWithEmailAndPassword(auth, email, password);
-    console.log("Successfully registered:", result);
 
     // Step 2: Update the user's display name in Firebase
     await updateProfile(result.user, { displayName });
-    console.log("Display name set:", result.user.displayName);
 
     // Step 3: Prepare user data for the external REST API
     const requestBody = {
@@ -47,7 +45,6 @@ export const registerWithEmailAndPassword = async (
 
     // Step 5: Capture the response
     const responseData = apiResponse.data.id_usuario; // Access the response data directly
-    console.log("API Response:", responseData);
 
     // Optionally return the API response data or the Firebase user
     return { firebaseUser: result.user, id_usuario: responseData };
@@ -70,8 +67,6 @@ export const loginWithEmailAndPassword = async (
   try {
     // Step 1: Attempt to sign in with Firebase
     const result = await signInWithEmailAndPassword(auth, email, password);
-    console.log("Successfully logged in:---->>>>>", result);
-    console.log("url: ", `${import.meta.env.VITE_API_URL}/usuarios/login`);
 
     // Step 2: Prepare the request for the REST API
     const requestBody = {
@@ -90,12 +85,9 @@ export const loginWithEmailAndPassword = async (
       }
     );
 
-    console.log("API Response:", apiResponse);
-
     // Step 4: Check if the API response is successful
     if (apiResponse.status === 200) {
       const token = apiResponse.data.token; // Capture the token from the API response
-      console.log("API Token:", token);
       // You can store the token in local storage or state if necessary
       localStorage.setItem("authToken", token); // Example: Storing the token
       return result.user; // Return the Firebase user object
@@ -136,8 +128,8 @@ export const loginWithFacebook = async () => {
 
 export const logout = async () => {
   try {
-    await signOut(auth);
-    console.log("Has cerrado sesión correctamente");
+    await signOut(auth); // Sign out from Firebase
+    localStorage.removeItem("authToken"); // Clear the token from local storage
   } catch (error) {
     console.error("Error durante el cierre de sesión:", error);
     throw error;
