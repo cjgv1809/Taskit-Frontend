@@ -6,12 +6,12 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA4aos3PHhe8d31iXaX_DuhMJBFKd3fLNs",
-  authDomain: "taskit-d1c33.firebaseapp.com",
-  projectId: "taskit-d1c33",
-  storageBucket: "taskit-d1c33.appspot.com",
-  messagingSenderId: "816353236194",
-  appId: "1:816353236194:web:97c5770d10d515e3bc3abb",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase if it hasn't been initialized before
