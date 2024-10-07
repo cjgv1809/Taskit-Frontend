@@ -11,6 +11,11 @@ export interface AuthContextType {
 }
 
 export interface UserContextType {
-  userId: number | null;
-  setUserId: (id: number | null) => void;
+  userId: number;
+  setUserId: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export interface ProjectContextType {
+  projectId: number;
+  setProjectId: React.Dispatch<React.SetStateAction<number>>;
 }
