@@ -27,6 +27,7 @@ import {
   AccordionContent,
 } from "./ui/accordion";
 import CategoryComponent from "./Category";
+import { useUser, useProject } from "@/hooks";
 
 interface ProjectProps {
   project: {
@@ -49,7 +50,7 @@ interface Category {
   descripcion: string | null;
 }
 
-function Project({ project, projectId, onDelete }: ProjectProps) {
+function Project({ project, onDelete }: ProjectProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [projectName, setProjectName] = useState(project.nombre);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -65,13 +66,21 @@ function Project({ project, projectId, onDelete }: ProjectProps) {
   });
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(0);
+  const { projectId } = useProject();
+  const { userId: idUser } = useUser();
+  console.log("Project ID from context:", projectId);
+  console.log("User ID from context:", idUser);
 
   const handleDeleteCategory = async (categoryId: number) => {
     try {
       await deleteCategory(categoryId);
       // Refetch categories after deleting
-      const updatedCategories = await getCategoriesByProjectId(projectId);
-      setCategories(updatedCategories);
+      if (projectId !== null) {
+        const updatedCategories = await getCategoriesByProjectId(projectId);
+        setCategories(updatedCategories);
+      } else {
+        console.error("Project ID is null");
+      }
     } catch (error) {
       console.error("Error deleting category:", error);
     }
@@ -117,6 +126,7 @@ function Project({ project, projectId, onDelete }: ProjectProps) {
   const handleCategoryCreated = async (categoryId: number) => {
     console.log("New category created with ID:", categoryId);
     // Refetch categories after creating a new one
+
     const updatedCategories = await getCategoriesByProjectId(projectId);
     setCategories(updatedCategories);
   };
@@ -315,8 +325,9 @@ function Project({ project, projectId, onDelete }: ProjectProps) {
                           descripcion: category.descripcion || "", // Use empty string if null
                         });
                       }}
+                      className="p-3 transition-all hover:bg-gray-100 focus-visible:bg-gray-100"
                     >
-                      <Edit2 size={20} className="text-gray-500" />
+                      <Edit2 size={22} className="text-gray-500" />
                     </Button>
                     <Button
                       variant="ghost"
@@ -327,8 +338,9 @@ function Project({ project, projectId, onDelete }: ProjectProps) {
                         setCategoryToDelete(category.id_categoria); // Set the category ID to state
                         setIsCategoryDialogOpen(true); // Open the dialog
                       }}
+                      className="p-3 transition-all hover:bg-gray-100 focus-visible:bg-gray-100"
                     >
-                      <Trash2 size={20} className="text-red-500" />
+                      <Trash2 size={22} className="text-red-500" />
                     </Button>
                   </div>
                 </div>
