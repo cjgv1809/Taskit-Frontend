@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logout } from "@/services/AuthService";
 import { createProject, deleteProject, getProjectsByUser } from "@/services";
+import { useProject } from "@/hooks";
 
 interface ProjectType {
   id_usuario: number;
@@ -38,12 +39,12 @@ function DashboardView() {
   const { currentUser } = useAuth();
   const { userId } = useUser();
   const [projects, setProjects] = useState<FullProjectType[]>([]);
-  const [, setProjectId] = useState(0);
   const [projectData, setProjectData] = useState({
     nombre: "",
     descripcion: "",
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { setProjectId } = useProject();
 
   useEffect(() => {
     // fetch projects on component mount
@@ -139,7 +140,7 @@ function DashboardView() {
               Añadir tarea
             </button>
           </div>
-          <nav className="flex-1 mt-4">
+          <nav className="flex-1 mt-4 overflow-y-auto scrollbar-none">
             <ul>
               <li>
                 <Link
@@ -174,11 +175,10 @@ function DashboardView() {
               </li>
             </ul>
           </nav>
-          <Button variant="ghost" size="lg" asChild>
+          <Button variant="ghost" size="lg" onClick={logout} asChild>
             <Link
               to="/"
-              onClick={logout}
-              className="flex items-center justify-start w-full gap-2 text-base text-gray-600 rounded-none hover:bg-gray-100"
+              className="w-full gap-2 text-base text-gray-600 rounded-none hover:bg-gray-100"
             >
               <LogOut size={20} />
               <span className="font-semibold text-gray-600">Cerrar Sesión</span>
@@ -263,7 +263,7 @@ function DashboardView() {
             <h1 className="mb-2 text-2xl font-bold">
               Hola, {currentUser?.displayName}!
             </h1>
-            <p className="mb-6 text-gray-600">
+            <p className="mb-6 font-light text-gray-600">
               {new Date().toLocaleDateString("es-ES", {
                 weekday: "long",
                 year: "numeric",
