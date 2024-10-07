@@ -184,7 +184,7 @@ function DashboardView() {
             <Link
               to="/"
               onClick={logout}
-              className="flex items-center w-full gap-2 text-base text-gray-600 rounded-none hover:bg-gray-100"
+              className="flex items-center justify-start w-full gap-2 text-base text-gray-600 rounded-none hover:bg-gray-100"
             >
               <LogOut size={20} />
               <span className="font-semibold text-gray-600">Cerrar Sesión</span>
@@ -277,6 +277,18 @@ function DashboardView() {
                 day: "numeric",
               })}
             </p>
+
+            <div className="w-full my-6">
+              <Button
+                variant="ghost"
+                size="lg"
+                className="font-medium text-red-600 bg-red-100"
+                onClick={() => {}}
+              >
+                <Plus size={20} className="mr-2" />
+                Añadir Tarea
+              </Button>
+            </div>
 
             {/* Dashboard Image */}
             {projects.length === 0 && (
