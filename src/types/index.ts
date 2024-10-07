@@ -21,49 +21,6 @@ export interface UserProjectResponse {
   descripcion: string;
 }
 
-export interface CategoryRequest {
-  nombre: string;
-  id_proyecto: number;
-  descripcion: string;
-}
-
-export interface CategoryResponseByProjectId {
-  id: number;
-  id_proyecto: number;
-  nombre: string;
-  descripcion: string;
-}
-
-export type CategoryResponseWithoutId = Omit<ProjectResponse, "id">;
-
-type TaskStatus = "Pendiente" | "En proceso" | "Completada";
-
-type TaskPriority = "Baja" | "Media" | "Alta";
-
-export interface TaskRequest {
-  id_categoria: number;
-  titulo: string;
-  descripcion: string;
-  estado: TaskStatus;
-  prioridad: TaskPriority;
-}
-
-export interface TaskResponseByCategoryId {
-  id: number;
-  id_categoria: number;
-  titulo: string;
-  descripcion: string;
-  estado: TaskStatus;
-  prioridad: TaskPriority;
-}
-
-export type TaskResponseWithoutId = Omit<ProjectResponse, "id">;
-
-export type TaskRequestWithoutIdCategory = Omit<
-  TaskRequest,
-  "id_categoria" | "id"
->;
-
 type FirebaseUser = Pick<
   User,
   "displayName" | "email" | "phoneNumber" | "photoURL" | "providerId" | "uid"
@@ -72,4 +29,15 @@ type FirebaseUser = Pick<
 export interface AuthContextType {
   currentUser: FirebaseUser | null;
   loading: boolean;
+}
+
+export interface UserContextType {
+  userId: number | null;
+  setUserId: (id: number | null) => void;
+}
+
+export interface Project {
+  id_usuario: number | null;
+  nombre: string;
+  descripcion: string;
 }
