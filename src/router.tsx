@@ -17,12 +17,9 @@ const BrowserRouter = createBrowserRouter([
       { path: "sign-in", element: <SignInView /> },
       {
         path: "dashboard",
-        element: <DashboardLayout />, // This is now the protected route
+        element: <DashboardLayout />, // Protected route
         children: [
           { index: true, element: <DashboardView /> }, // Dashboard home
-          // Add other routes for tasks:
-          // { path: "create-task", element: <CreateTaskView /> },
-          // { path: "edit-task/:taskId", element: <EditTaskView /> },
         ],
       },
       { path: "*", element: <NotFoundView /> }, // 404 route at the end
