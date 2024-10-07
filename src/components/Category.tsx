@@ -38,8 +38,8 @@ function Category({
     nombre: "",
     descripcion: "",
   });
-  const [categoryId, setCategoryId] = useState<number | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [, setCategoryId] = useState<number | null>(null);
+  const [, setCategories] = useState<Category[]>([]);
 
   const handleCreateNewCategory = async () => {
     try {

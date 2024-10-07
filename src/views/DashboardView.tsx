@@ -17,17 +17,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logout } from "@/services/AuthService";
 import { createProject, deleteProject, getProjectsByUser } from "@/services";
-import type { Project as ProjectType } from "@/types";
+
+interface ProjectType {
+  id_usuario: number;
+  nombre: string;
+  descripcion: string;
+}
 
 interface ProjectTypeResponse {
   id_proyecto: number;
   message: string;
 }
 
-type FullProjectType = Omit<ProjectType, "id_usuario"> &
-  ProjectTypeResponse & {
-    id_usuario: number;
-  };
+interface FullProjectType extends ProjectType {
+  id_proyecto: number;
+  message: string;
+}
 
 function DashboardView() {
   const { currentUser } = useAuth();
@@ -64,6 +69,10 @@ function DashboardView() {
   // create new project
   const handleCreateNewProject = async () => {
     try {
+      if (userId === null) {
+        console.error("User ID is null");
+        return;
+      }
       const newProject: ProjectType = { ...projectData, id_usuario: userId };
 
       if (

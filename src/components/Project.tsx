@@ -49,7 +49,7 @@ interface Category {
   descripcion: string | null;
 }
 
-function Project({ project, projectId, projectData, onDelete }: ProjectProps) {
+function Project({ project, projectId, onDelete }: ProjectProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [projectName, setProjectName] = useState(project.nombre);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -180,7 +180,7 @@ function Project({ project, projectId, projectData, onDelete }: ProjectProps) {
   };
 
   return (
-    <main className="flex-1">
+    <div className="flex-1">
       <div className="flex justify-between gap-4 p-4 bg-white rounded-lg rounded-b-none shadow-sm">
         <div className="flex flex-col w-full gap-2">
           {isEditing ? (
@@ -454,7 +454,7 @@ function Project({ project, projectId, projectData, onDelete }: ProjectProps) {
             <span className="text-gray-500">3</span>
           </div>
         </div> */}
-    </main>
+    </div>
   );
 }
 
