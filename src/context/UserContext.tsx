@@ -8,7 +8,7 @@ export const UserContext = createContext<UserContextType | undefined>(
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [userId, setUserId] = useState<number | null>(1);
+  const [userId, setUserId] = useState<number>(1);
 
   return (
     <UserContext.Provider value={{ userId, setUserId }}>
