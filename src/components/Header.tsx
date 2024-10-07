@@ -1,9 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks";
+import { useVerifySignedInUser } from "@/hooks";
+import Loading from "./Loading";
 
 function Header() {
-  const { currentUser } = useAuth();
+  const { isAuthenticated, loading } = useVerifySignedInUser();
+  const isDashboard = useLocation().pathname === "/dashboard";
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full mx-auto bg-white border-b px-9">
@@ -50,9 +56,9 @@ function Header() {
           </Link>
         </div>
         <div className="items-center hidden gap-4 md:flex">
-          {currentUser ? (
+          {isAuthenticated && !isDashboard ? (
             <Button variant="default" size="lg" asChild>
-              <Link to="/dashboard">Dashboard</Link>
+              <Link to="/dashboard">Ir a Proyectos</Link>
             </Button>
           ) : (
             <>
