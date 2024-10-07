@@ -30,6 +30,9 @@ const createProject = async (
     }
 
     const { id_proyecto, message } = response.data;
+    
+    console.log(id_proyecto);
+    console.log(message);
 
     return response.data;
   } catch (error) {
