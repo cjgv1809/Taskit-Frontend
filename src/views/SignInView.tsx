@@ -236,9 +236,6 @@ function SignInView() {
               <span className="text-xl">Facebook</span>
             </Button>
           </div>
-          {/* <div className="my-4">
-            <SignIn path="/sign-in" />
-          </div> */}
           <p className="text-lg font-medium text-center">
             ¿No tienes cuenta?{" "}
             <Link to="/sign-up" className="underline underline-offset-4">

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { registerWithEmailAndPassword } from "@/services";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { registerWithEmailAndPassword } from "@/services";
+import { useUser } from "@/hooks/useUser";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -13,6 +14,7 @@ function RegisterView() {
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const { setUserId } = useUser(); // Get setUserId from context
   const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -20,11 +22,12 @@ function RegisterView() {
     setError(null); // Reset the error state before registration attempt
 
     try {
-      await registerWithEmailAndPassword(
+      const { id_usuario } = await registerWithEmailAndPassword(
         userData.email,
         userData.password,
         userData.name
       );
+      setUserId(id_usuario); // Store id_usuario in context
       navigate("/dashboard");
     } catch (error) {
       if (error instanceof Error) {
@@ -289,9 +292,6 @@ function RegisterView() {
               <span className="text-xl">Facebook</span>
             </Button>
           </div>
-          {/* {/* <div className="my-4">
-            <SignUp path="/sign-up" />
-          </div> */}
           <p className="text-lg font-medium text-center">
             ¿Ya tienes cuenta?{" "}
             <Link to="/sign-in" className="underline underline-offset-4">
