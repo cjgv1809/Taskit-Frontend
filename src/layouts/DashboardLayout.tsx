@@ -1,23 +1,17 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "@/hooks";
+import { useVerifySignedInUser } from "@/hooks/useVerifySignedInUser";
 import Loading from "@/components/Loading";
 
 function DashboardLayout() {
-  const auth = useAuth();
-
-  if (!auth) {
-    return <Navigate to="/sign-in" />;
-  }
-
-  const { currentUser, loading } = auth;
+  const { isAuthenticated, loading } = useVerifySignedInUser();
+  console.log("LOADING in DashboardLayout:", loading);
+  console.log("ISAUTHENTICATED in DashboardLayout:", isAuthenticated);
 
   if (loading) {
-    return <Loading />;
+    return <Loading />; // Display loading while the auth status is being determined
   }
 
-  console.log(currentUser);
-
-  return currentUser ? <Outlet /> : <Navigate to="/sign-in" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/dashboard" />;
 }
 
 export default DashboardLayout;
