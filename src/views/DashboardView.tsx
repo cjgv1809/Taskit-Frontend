@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, Plus, ChevronRight, LogOut } from "lucide-react";
 import { useAuth, useUser } from "@/hooks";
@@ -13,6 +13,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { logout } from "@/services/AuthService";
@@ -45,6 +54,7 @@ function DashboardView() {
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { setProjectId } = useProject();
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // fetch projects on component mount
@@ -74,10 +84,7 @@ function DashboardView() {
       }
       const newProject: ProjectType = { ...projectData, id_usuario: userId };
 
-      if (
-        newProject.nombre.trim() === "" ||
-        newProject.descripcion.trim() === ""
-      ) {
+      if (newProject.nombre.trim() === "") {
         console.error("Project name and description cannot be blank");
         return;
       }
@@ -86,8 +93,24 @@ function DashboardView() {
 
       const { id_proyecto, message } = response;
 
-      // Set project ID and add to projects list
-      setProjectId(id_proyecto);
+      setProjectId([id_proyecto]); // Set project ID for immediate use
+
+      // Get existing project IDs from localStorage (or initialize as empty array)
+      let storedProjectIds: number[] = localStorage.getItem("projectIds")
+        ? JSON.parse(localStorage.getItem("projectIds") as string)
+        : [];
+
+      // Add new project ID to the array
+      if (typeof storedProjectIds === "string") {
+        storedProjectIds = JSON.parse(storedProjectIds) as number[];
+        if (!Array.isArray(storedProjectIds)) {
+          storedProjectIds = [];
+        }
+      }
+      (storedProjectIds as number[]).push(id_proyecto);
+
+      // Update localStorage with the updated array
+      localStorage.setItem("projectIds", JSON.stringify(storedProjectIds));
 
       if (userId === null) {
         console.error("User ID is null");
@@ -112,9 +135,10 @@ function DashboardView() {
   const handleDeleteProject = async (projectId: number) => {
     try {
       await deleteProject(projectId);
-      setProjects((prevProjects) =>
-        prevProjects.filter((project) => project.id_proyecto !== projectId)
-      );
+
+      // fetch projects again
+      const projects: FullProjectType[] = await getProjectsByUser(1);
+      setProjects(projects);
     } catch (error) {
       console.error("Error deleting project:", error);
     }
@@ -125,7 +149,12 @@ function DashboardView() {
       {/* Header */}
       <header className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
         <div className="flex items-center gap-4">
-          <Menu className="text-gray-500" />
+          <Button
+            variant="ghost"
+            onClick={() => mobileMenuRef.current?.click()}
+          >
+            <Menu size={24} className="text-gray-500 cursor-pointer" />
+          </Button>
           <span className="text-gray-600">Inicio /</span>
         </div>
         <div className="flex items-center"></div>
@@ -133,7 +162,7 @@ function DashboardView() {
 
       <div className="flex h-screen bg-gray-100">
         {/* Sidebar */}
-        <aside className="flex-[0.2] bg-white border-r border-gray-200 flex flex-col">
+        <aside className="md:flex-[0.2] bg-white border-r border-gray-200 md:flex flex-col hidden">
           <div className="p-4">
             <button className="flex items-center justify-center w-full px-4 py-2 font-medium text-red-600 bg-red-100 rounded-md">
               <Plus size={20} className="mr-2" />
@@ -188,6 +217,78 @@ function DashboardView() {
             <img src="images/Logo.svg" alt="Taskit Logo" className="w-40" />
           </div>
         </aside>
+
+        {/* Mobile Menu */}
+        <Sheet>
+          <SheetTrigger>
+            <div ref={mobileMenuRef}></div>
+          </SheetTrigger>
+          <SheetContent side="left">
+            <SheetHeader>
+              <SheetTitle>
+                <img src="images/Logo.svg" alt="Taskit Logo" className="w-40" />
+              </SheetTitle>
+              <SheetDescription>
+                <div
+                  className="flex flex-col items-start gap-2 my-10"
+                  role="menu"
+                >
+                  <ul className="flex flex-col w-full">
+                    <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                      <Link
+                        to="/"
+                        className="font-semibold text-primary-foreground"
+                      >
+                        Home
+                      </Link>
+                    </li>
+                    <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                      <Link
+                        to="/projects"
+                        className="font-semibold text-primary-foreground"
+                      >
+                        Projects
+                      </Link>
+                    </li>
+                    <ul>
+                      {projects.map((project, index) => (
+                        <li>
+                          <Link
+                            to="#"
+                            className="flex items-center w-full p-3 ml-1 font-medium rounded-md hover:bg-primary"
+                            key={`project-${index}`}
+                          >
+                            <ChevronRight size={16} className="mr-2" />
+                            {project.nombre}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                      <Link
+                        to="/tasks"
+                        className="font-semibold text-primary-foreground"
+                      >
+                        Tasks
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </SheetDescription>
+            </SheetHeader>
+            <SheetFooter>
+              <Button
+                variant="ghost"
+                size="lg"
+                className="font-medium text-red-600 bg-red-100"
+                onClick={logout}
+              >
+                <LogOut size={20} className="mr-2" />
+                Cerrar Sesión
+              </Button>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
 
         {/* Dialog to add a new project */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -257,7 +358,7 @@ function DashboardView() {
         </Dialog>
 
         {/* Main Content */}
-        <div className="flex-[0.8] flex flex-col overflow-hidden">
+        <div className="md:flex-[0.8] flex flex-col overflow-hidden flex-1">
           {/* Page Content */}
           <main className="flex-1 p-6 pb-20 overflow-y-scroll scrollbar-none">
             <h1 className="mb-2 text-2xl font-bold">
@@ -307,7 +408,7 @@ function DashboardView() {
               </div>
             )}
 
-            <div className="space-y-6">
+            <div>
               {projects.map((project) => (
                 <Project
                   key={project.id_proyecto}
