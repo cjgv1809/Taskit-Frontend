@@ -27,7 +27,7 @@ import {
   AccordionContent,
 } from "./ui/accordion";
 import CategoryComponent from "./Category";
-import { useUser, useProject } from "@/hooks";
+import { useProject } from "@/hooks";
 
 interface ProjectProps {
   project: {
@@ -50,7 +50,7 @@ interface Category {
   descripcion: string | null;
 }
 
-function Project({ project, onDelete }: ProjectProps) {
+function Project({ project, projectId, onDelete }: ProjectProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [projectName, setProjectName] = useState(project.nombre);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -66,10 +66,10 @@ function Project({ project, onDelete }: ProjectProps) {
   });
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(0);
-  const { projectId } = useProject();
-  const { userId: idUser } = useUser();
+  const { setProjectId } = useProject();
+  // const { userId: idUser } = useUser();
   console.log("Project ID from context:", projectId);
-  console.log("User ID from context:", idUser);
+  // console.log("User ID from context:", idUser);
 
   const handleDeleteCategory = async (categoryId: number) => {
     try {
@@ -170,7 +170,14 @@ function Project({ project, onDelete }: ProjectProps) {
 
   const handleDeleteProject = async (projectId: number) => {
     try {
+      // Remove the project ID from the list of project IDs
+      setProjectId((prevProjectIds) =>
+        prevProjectIds.filter((id) => id !== projectId)
+      );
+
+      // Call the deleteProject function with the correct projectId
       await deleteProject(projectId);
+
       console.log("Project deleted:", projectId);
       onDelete(projectId); // Call the callback function to update the parent state
     } catch (error) {
@@ -190,7 +197,7 @@ function Project({ project, onDelete }: ProjectProps) {
   };
 
   return (
-    <div className="flex-1">
+    <div>
       <div className="flex justify-between gap-4 p-4 bg-white rounded-lg rounded-b-none shadow-sm">
         <div className="flex flex-col w-full gap-2">
           {isEditing ? (
@@ -413,6 +420,7 @@ function Project({ project, onDelete }: ProjectProps) {
                   if (categoryToDelete) {
                     handleDeleteCategory(categoryToDelete); // Use the state variable
                     setIsCategoryDialogOpen(false);
+                    setCategoryToDelete(0);
                   }
                 }}
               >
