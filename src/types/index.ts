@@ -16,6 +16,6 @@ export interface UserContextType {
 }
 
 export interface ProjectContextType {
-  projectId: number;
-  setProjectId: React.Dispatch<React.SetStateAction<number>>;
+  projectId: number | number[];
+  setProjectId: React.Dispatch<React.SetStateAction<number[]>>;
 }
