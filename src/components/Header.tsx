@@ -23,8 +23,7 @@ function Header() {
         <div className="mx-auto md:mx-0">
           <Link to="/">
             <svg
-              width="276"
-              height="89"
+              className="h-auto w-44"
               viewBox="0 0 276 89"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
