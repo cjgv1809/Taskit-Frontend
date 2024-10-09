@@ -160,6 +160,78 @@ function DashboardView() {
         <div className="flex items-center"></div>
       </header>
 
+      {/* Mobile Menu */}
+      <Sheet>
+        <SheetTrigger>
+          <div ref={mobileMenuRef} className="hidden"></div>
+        </SheetTrigger>
+        <SheetContent side="left">
+          <SheetHeader>
+            <SheetTitle>
+              <img src="images/Logo.svg" alt="Taskit Logo" className="w-40" />
+            </SheetTitle>
+            <SheetDescription>
+              <div
+                className="flex flex-col items-start gap-2 my-10"
+                role="menu"
+              >
+                <ul className="flex flex-col w-full">
+                  <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                    <Link
+                      to="/"
+                      className="font-semibold text-primary-foreground"
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                    <Link
+                      to="/projects"
+                      className="font-semibold text-primary-foreground"
+                    >
+                      Projects
+                    </Link>
+                  </li>
+                  <ul>
+                    {projects.map((project, index) => (
+                      <li>
+                        <Link
+                          to="#"
+                          className="flex items-center w-full p-3 ml-1 font-medium rounded-md hover:bg-primary"
+                          key={`project-${index}`}
+                        >
+                          <ChevronRight size={16} className="mr-2" />
+                          {project.nombre}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                    <Link
+                      to="/tasks"
+                      className="font-semibold text-primary-foreground"
+                    >
+                      Tasks
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </SheetDescription>
+          </SheetHeader>
+          <SheetFooter>
+            <Button
+              variant="ghost"
+              size="lg"
+              className="font-medium text-red-600 bg-red-100"
+              onClick={logout}
+            >
+              <LogOut size={20} className="mr-2" />
+              Cerrar Sesión
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+
       <div className="flex h-screen bg-gray-100">
         {/* Sidebar */}
         <aside className="md:flex-[0.2] bg-white border-r border-gray-200 md:flex flex-col hidden">
@@ -217,78 +289,6 @@ function DashboardView() {
             <img src="images/Logo.svg" alt="Taskit Logo" className="w-40" />
           </div>
         </aside>
-
-        {/* Mobile Menu */}
-        <Sheet>
-          <SheetTrigger>
-            <div ref={mobileMenuRef}></div>
-          </SheetTrigger>
-          <SheetContent side="left">
-            <SheetHeader>
-              <SheetTitle>
-                <img src="images/Logo.svg" alt="Taskit Logo" className="w-40" />
-              </SheetTitle>
-              <SheetDescription>
-                <div
-                  className="flex flex-col items-start gap-2 my-10"
-                  role="menu"
-                >
-                  <ul className="flex flex-col w-full">
-                    <li className="w-full p-3 border-b rounded-md hover:bg-primary">
-                      <Link
-                        to="/"
-                        className="font-semibold text-primary-foreground"
-                      >
-                        Home
-                      </Link>
-                    </li>
-                    <li className="w-full p-3 border-b rounded-md hover:bg-primary">
-                      <Link
-                        to="/projects"
-                        className="font-semibold text-primary-foreground"
-                      >
-                        Projects
-                      </Link>
-                    </li>
-                    <ul>
-                      {projects.map((project, index) => (
-                        <li>
-                          <Link
-                            to="#"
-                            className="flex items-center w-full p-3 ml-1 font-medium rounded-md hover:bg-primary"
-                            key={`project-${index}`}
-                          >
-                            <ChevronRight size={16} className="mr-2" />
-                            {project.nombre}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    <li className="w-full p-3 border-b rounded-md hover:bg-primary">
-                      <Link
-                        to="/tasks"
-                        className="font-semibold text-primary-foreground"
-                      >
-                        Tasks
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </SheetDescription>
-            </SheetHeader>
-            <SheetFooter>
-              <Button
-                variant="ghost"
-                size="lg"
-                className="font-medium text-red-600 bg-red-100"
-                onClick={logout}
-              >
-                <LogOut size={20} className="mr-2" />
-                Cerrar Sesión
-              </Button>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
 
         {/* Dialog to add a new project */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

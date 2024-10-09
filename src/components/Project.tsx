@@ -26,6 +26,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "./ui/accordion";
+import { Separator } from "./ui/separator";
 import CategoryComponent from "./Category";
 import { useProject } from "@/hooks";
 
@@ -285,97 +286,103 @@ function Project({ project, projectId, onDelete }: ProjectProps) {
       </AlertDialog>
 
       {/* Show categories accordion */}
-      {categories.length > 0 &&
-        categories.map((category: Category) => (
-          <Accordion
-            key={category.id_categoria}
-            type="single"
-            collapsible
-            className="mb-2 bg-white rounded-lg shadow-sm"
-          >
-            <AccordionItem value="item-1">
-              <AccordionTrigger>
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center">
-                    {editingCategoryId === category.id_categoria ? (
-                      <Input
-                        type="text"
-                        value={editingCategoryData.nombre}
-                        onChange={(e) => {
-                          setEditingCategoryData((prev) => ({
-                            ...prev,
-                            nombre: e.target.value,
-                          }));
+      {categories.length > 0 && (
+        <>
+          {categories.map((category: Category) => (
+            <Accordion
+              key={category.id_categoria}
+              type="single"
+              collapsible
+              className="mb-2 bg-white rounded-lg shadow-sm"
+            >
+              <AccordionItem value="item-1">
+                <AccordionTrigger>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center">
+                      {editingCategoryId === category.id_categoria ? (
+                        <Input
+                          type="text"
+                          value={editingCategoryData.nombre}
+                          onChange={(e) => {
+                            setEditingCategoryData((prev) => ({
+                              ...prev,
+                              nombre: e.target.value,
+                            }));
+                          }}
+                          onKeyDown={(e) =>
+                            handleKeyPress(e, category.id_categoria)
+                          }
+                          onClick={(e) => e.stopPropagation()}
+                          className="mr-2"
+                        />
+                      ) : (
+                        <h3 className="text-lg font-semibold text-gray-700">
+                          {category.nombre}
+                        </h3>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        title="Editar Categoria"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingCategoryId(category.id_categoria);
+                          setEditingCategoryData({
+                            nombre: category.nombre,
+                            descripcion: category.descripcion || "", // Use empty string if null
+                          });
                         }}
-                        onKeyDown={(e) =>
-                          handleKeyPress(e, category.id_categoria)
-                        }
-                        onClick={(e) => e.stopPropagation()}
-                        className="mr-2"
-                      />
-                    ) : (
-                      <h3 className="text-lg font-semibold text-gray-700">
-                        {category.nombre}
-                      </h3>
-                    )}
+                        className="p-3 transition-all hover:bg-gray-100 focus-visible:bg-gray-100"
+                      >
+                        <Edit2 size={22} className="text-gray-500" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        title="Eliminar Categoria"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCategoryToDelete(category.id_categoria); // Set the category ID to state
+                          setIsCategoryDialogOpen(true); // Open the dialog
+                        }}
+                        className="p-3 transition-all hover:bg-gray-100 focus-visible:bg-gray-100"
+                      >
+                        <Trash2 size={22} className="text-red-500" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      title="Editar Categoria"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingCategoryId(category.id_categoria);
-                        setEditingCategoryData({
-                          nombre: category.nombre,
-                          descripcion: category.descripcion || "", // Use empty string if null
-                        });
+                </AccordionTrigger>
+                <AccordionContent>
+                  {editingCategoryId === category.id_categoria ? (
+                    <Input
+                      type="text"
+                      value={editingCategoryData.descripcion}
+                      onChange={(e) => {
+                        setEditingCategoryData((prev) => ({
+                          ...prev,
+                          descripcion: e.target.value,
+                        }));
                       }}
-                      className="p-3 transition-all hover:bg-gray-100 focus-visible:bg-gray-100"
-                    >
-                      <Edit2 size={22} className="text-gray-500" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      title="Eliminar Categoria"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCategoryToDelete(category.id_categoria); // Set the category ID to state
-                        setIsCategoryDialogOpen(true); // Open the dialog
-                      }}
-                      className="p-3 transition-all hover:bg-gray-100 focus-visible:bg-gray-100"
-                    >
-                      <Trash2 size={22} className="text-red-500" />
-                    </Button>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                {editingCategoryId === category.id_categoria ? (
-                  <Input
-                    type="text"
-                    value={editingCategoryData.descripcion}
-                    onChange={(e) => {
-                      setEditingCategoryData((prev) => ({
-                        ...prev,
-                        descripcion: e.target.value,
-                      }));
-                    }}
-                    onKeyDown={(e) => handleKeyPress(e, category.id_categoria)}
-                    onClick={(e) => e.stopPropagation()}
-                    className="mr-2"
-                  />
-                ) : (
-                  <p className="text-base font-medium text-gray-500">
-                    {category.descripcion || "Sin descripción"}
-                  </p>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        ))}
+                      onKeyDown={(e) =>
+                        handleKeyPress(e, category.id_categoria)
+                      }
+                      onClick={(e) => e.stopPropagation()}
+                      className="mr-2"
+                    />
+                  ) : (
+                    <p className="text-base font-medium text-gray-500">
+                      {category.descripcion || "Sin descripción"}
+                    </p>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ))}
+          <Separator className="mt-8 mb-12 last-of-type:not" />
+        </>
+      )}
 
       {/* Creating a new category */}
       {isCreatingCategory && (
