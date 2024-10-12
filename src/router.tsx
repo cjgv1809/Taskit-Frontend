@@ -7,6 +7,8 @@ import SignInView from "./views/SignInView";
 import RegisterView from "./views/RegisterView";
 import NotFoundView from "./views/NotFoundView";
 import DashboardView from "./views/DashboardView";
+import ProjectsView from "./views/ProjectsView";
+import ErrorView from "./views/ErrorView";
 import { useVerifySignedInUser } from "./hooks/useVerifySignedInUser";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -29,18 +31,22 @@ const BrowserRouter = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorView />,
     children: [
       { index: true, element: <HomeView /> },
       { path: "sign-up", element: <RegisterView /> },
       { path: "sign-in", element: <SignInView /> },
       {
-        path: "dashboard",
+        path: "proyectos",
         element: (
           <ProtectedRoute>
             <DashboardLayout />
           </ProtectedRoute>
         ),
-        children: [{ index: true, element: <DashboardView /> }],
+        children: [
+          { index: true, element: <DashboardView /> },
+          { path: ":projectId", element: <ProjectsView /> },
+        ],
       },
       { path: "*", element: <NotFoundView /> },
     ],

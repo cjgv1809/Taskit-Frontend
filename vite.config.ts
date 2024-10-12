@@ -12,5 +12,8 @@ export default defineConfig({
   },
   server: {
     open: true,
+    hmr: {
+      timeout: 5000,
+    },
   },
 });
