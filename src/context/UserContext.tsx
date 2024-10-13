@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import { UserContextType } from "@/types";
 
 export const UserContext = createContext<UserContextType>({
-  userId: 1,
+  userId: 0,
   setUserId: () => {},
 });
 

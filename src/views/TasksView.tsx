@@ -26,7 +26,13 @@ function TasksView() {
   const { projects, tasks } = state;
   const { isDarkMode } = useTheme();
 
-  console.log("TasksView state:", projects);
+  // find project name by id
+  const findProjectName = (projectId: number) => {
+    const project = projects.find(
+      (project) => project.id_proyecto === projectId
+    );
+    return project?.nombre;
+  };
 
   useEffect(() => {
     const fetchAllTasks = async () => {
@@ -113,6 +119,11 @@ function TasksView() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Link to="/proyectos/tareas">Ver tareas completadas</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/" onClick={logout}>
+                    Cerrar Sesión
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -245,7 +256,7 @@ function TasksView() {
             <ArrowLeft size={20} className="text-white" />
             Volver a Proyectos
           </Button>
-          <main className="flex-1 p-6 overflow-y-scroll rounded-lg scrollbar-none dark:bg-secondary/50 dark:text-white">
+          <main className="flex-1 overflow-y-scroll rounded-lg scrollbar-none dark:text-white">
             <h1 className="mb-2 text-2xl font-bold">
               Hola, {currentUser?.displayName}!
             </h1>
@@ -258,23 +269,58 @@ function TasksView() {
               })}
             </p>
 
+            {tasks?.length === 0 && (
+              <div className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white">
+                <h3 className="text-xl font-bold">No hay tareas completadas</h3>
+              </div>
+            )}
+
+            {/* Show Tasks */}
             <div>
-              <h2 className="mb-4 text-xl font-semibold">
-                Tareas completadas{" "}
-                <span className="font-normal text-gray-600">
-                  ({tasks?.length || 0})
-                </span>
-              </h2>
-              {tasks?.map((task) => (
-                <div
-                  key={task.id_tarea}
-                  className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white last:mb-0"
-                >
-                  <h3 className="text-xl font-semibold">{task.titulo}</h3>
-                  Prioridad{" "}
-                  <span className="mt-2 text-gray-600">{task.prioridad}</span>
-                </div>
-              ))}
+              {tasks?.length > 0 &&
+                tasks?.map((task) => (
+                  <>
+                    <h2 className="mb-4 text-xl font-semibold">
+                      Tareas completadas{" "}
+                      <span className="font-normal text-gray-600">
+                        ({tasks?.length || 0})
+                      </span>
+                    </h2>
+                    <div
+                      key={task.id_tarea}
+                      className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white last:mb-0"
+                    >
+                      <h3 className="text-xl font-bold">{task.titulo}</h3>
+                      <p className="mt-2 text-gray-600 dark:text-gray-400">
+                        <span className="font-semibold">Estado:</span>{" "}
+                        <span className="dark:text-accent2 text-accent">
+                          Completada
+                        </span>
+                      </p>
+                      <p className="mt-2 text-gray-600 dark:text-gray-400">
+                        <span className="font-semibold">Prioridad:</span>{" "}
+                        {task.prioridad === "Alta" ? (
+                          <span className="text-red-500">{task.prioridad}</span>
+                        ) : task.prioridad === "Media" ? (
+                          <span className="text-yellow-500">
+                            {task.prioridad}
+                          </span>
+                        ) : (
+                          <span className="text-green-500">
+                            {task.prioridad}
+                          </span>
+                        )}
+                      </p>
+                      <p className="mt-2 text-gray-600 dark:text-gray-400">
+                        {task.descripcion || ""}
+                      </p>
+                      <p className="mt-2 text-gray-600 dark:text-gray-400">
+                        <span className="font-semibold">Proyecto:</span>{" "}
+                        {findProjectName(task.id_proyecto)}
+                      </p>
+                    </div>
+                  </>
+                ))}
             </div>
           </main>
         </div>

@@ -136,6 +136,11 @@ function DashboardView() {
                 <DropdownMenuItem>
                   <Link to="/proyectos/tareas">Ver tareas completadas</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/" onClick={logout}>
+                    Cerrar Sesión
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

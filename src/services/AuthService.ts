@@ -39,7 +39,7 @@ export const registerWithEmailAndPassword = async (
     );
 
     // Check for a successful response
-    if (apiResponse.status !== 200) {
+    if (apiResponse.status !== 201) {
       throw new Error("Error durante el registro");
     }
 
