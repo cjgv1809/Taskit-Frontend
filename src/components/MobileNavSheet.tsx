@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, LogOut } from "lucide-react";
 import {
@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import { useProject, useTheme } from "@/hooks";
 import { logout } from "@/services";
 
-const MobileNavSheet = forwardRef<HTMLDivElement>((props, ref) => {
+const MobileNavSheet = forwardRef<HTMLDivElement>((_, ref) => {
   const { isDarkMode } = useTheme();
   const { state } = useProject();
   const { projects } = state;
