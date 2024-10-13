@@ -1,31 +1,28 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AlertCircle, ArrowLeft, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTheme, useVerifySignedInUser } from "@/hooks";
-import Loading from "./Loading";
-import DarkModeSwitch from "./DarkModeSwitch";
+import { useTheme } from "@/hooks";
 
-function Header() {
-  const { isAuthenticated, loading } = useVerifySignedInUser();
+interface ErrorPageProps {
+  statusCode?: number;
+  message?: string;
+}
+
+function ErrorView({
+  statusCode = 500,
+  message = "Ups! Algo salió mal.",
+}: ErrorPageProps) {
+  const navigate = useNavigate();
   const { isDarkMode } = useTheme();
-  const location = useLocation();
-  const currentPath = location.pathname;
-
-  // Don't render the header on the dashboard route
-  if (currentPath === "/proyectos") {
-    return null;
-  }
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
-    <header className="sticky top-0 z-50 w-full mx-auto bg-white border-b px-9 py-4 xl:max-w-[1400px] 2xl:max-w-full dark:bg-primary dark:border-border">
-      <div className="flex items-center justify-between">
-        <div className="mx-auto md:mx-0">
-          <Link to="/">
+    <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-primary/50">
+      {/* Header */}
+      <header className="py-4 bg-white border-b border-gray-200 dark:bg-primary dark:border-border">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center">
             <svg
-              className="h-auto w-44"
+              className="w-32 h-auto"
               viewBox="0 0 276 89"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -66,38 +63,66 @@ function Header() {
                 fill="#F5684E"
               />
             </svg>
-          </Link>
+          </div>
         </div>
-        <div className="items-center hidden gap-4 md:flex">
-          <DarkModeSwitch />
-          {isAuthenticated &&
-          (currentPath === "/" ||
-            currentPath === "/sign-up" ||
-            currentPath === "/sign-in") ? (
-            <Button
-              variant="default"
-              size="lg"
-              asChild
-            >
-              <Link to="/proyectos">Ir a Proyectos</Link>
-            </Button>
-          ) : !isAuthenticated &&
-            (currentPath === "/" ||
-              currentPath === "/sign-up" ||
-              currentPath === "/sign-in") ? (
-            <>
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/sign-in">Iniciar Sesión</Link>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex items-center justify-center flex-grow px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center">
+            <AlertCircle className="w-12 h-12 mx-auto text-red-500" />
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-dark-primary">
+              Error {statusCode}
+            </h2>
+            <p className="mt-2 text-sm text-gray-600 dark:text-dark-primary-foreground">
+              {message}
+            </p>
+          </div>
+          <div className="mt-8 space-y-6">
+            <div className="-space-y-px rounded-md shadow-sm">
+              <div className="p-6 bg-white rounded-lg shadow-md dark:bg-secondary">
+                <p className="text-sm text-gray-500 dark:text-dark-primary-foreground">
+                  Disculpa por las molestias, estamos trabajando para solucionar
+                  este problema lo más pronto posible.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <Button
+                type="button"
+                onClick={() => navigate(-1)}
+                variant="ghost"
+                className="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:bg-secondary dark:text-dark-primary"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                Ir atrás
               </Button>
-              <Button variant="default" size="lg" asChild>
-                <Link to="/sign-up">Registrarse</Link>
+              <Button
+                className="dark:bg-primary dark:text-dark-primary"
+                asChild
+              >
+                <Link to="/">
+                  <Home className="w-5 h-5 mr-2" />
+                  Ir al inicio
+                </Link>
               </Button>
-            </>
-          ) : null}
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white dark:bg-primary">
+        <div className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <p className="text-sm text-center text-gray-500 dark:text-dark-primary-foreground">
+            &copy; {new Date().getFullYear()} Taskit. Todos los derechos
+            reservados.
+          </p>
+        </div>
+      </footer>
+    </div>
   );
 }
 
-export default Header;
+export default ErrorView;

@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 
 function NotFoundView() {
   return (
-    <section className="flex items-center justify-center min-h-screen p-4 bg-gray-100">
-      <div className="w-full max-w-md p-8 text-center bg-white rounded-lg shadow-md">
+    <section className="flex items-center justify-center min-h-screen p-4 bg-gray-100 dark:bg-primary">
+      <div className="w-full max-w-md p-8 text-center bg-white rounded-lg shadow-md dark:bg-secondary">
         <svg
           className="w-24 h-24 mx-auto mb-6 text-accent"
           fill="none"
@@ -24,14 +24,21 @@ function NotFoundView() {
             d="M12 9v2m0 4h.01"
           />
         </svg>
-
-        <h1 className="mb-4 text-4xl font-bold text-gray-800">404</h1>
-        <p className="mb-6 text-xl text-gray-600">Oops! Página no encontrada</p>
-        <p className="mb-8 text-gray-500">
+        <h1 className="mb-4 text-4xl font-bold text-gray-800 dark:text-dark-primary">
+          404
+        </h1>
+        <p className="mb-6 text-xl text-gray-600 dark:text-dark-primary-foreground">
+          Oops! Página no encontrada
+        </p>
+        <p className="mb-8 text-gray-500 dark:text-dark-primary-foreground">
           Lo sentimos, la página que estás buscando no existe o ha sido
           eliminada.
         </p>
-        <Button variant="default" size="lg" asChild>
+        <Button
+          size="lg"
+          className="dark:bg-primary dark:text-dark-primary"
+          asChild
+        >
           <Link to="/" className="inline-flex items-center justify-center">
             <Home size={20} className="mr-2" />
             Volver al Inicio
