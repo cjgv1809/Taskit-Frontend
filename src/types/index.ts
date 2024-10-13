@@ -17,13 +17,14 @@ export interface UserContextType {
 export interface Project {
   id_proyecto: number;
   nombre: string;
-  descripcion: string;
+  descripcion?: string;
   id_usuario: number;
 }
 
 export interface Task {
   id_tarea: number;
   titulo: string;
+  descripcion?: string;
   prioridad: "Alta" | "Media" | "Baja";
   estado: "Por hacer" | "En curso" | "Finalizado";
   id_proyecto: number;

@@ -255,8 +255,8 @@ function TaskListAccordion() {
                             descripcion: task.descripcion || "",
                           });
                           setIsEditingTask((prev) => !prev);
-                          setSelectedStatus(task.estado);
-                          setSelectedPriority(task.prioridad);
+                          setSelectedStatus(task.estado as StatusEnum);
+                          setSelectedPriority(task.prioridad as PriorityEnum);
                           setOpenAccordionId(task.id_tarea.toString());
                         }}
                         className="p-3 transition-all hover:bg-gray-100 focus-visible:bg-gray-100 dark:hover:bg-secondary/95"

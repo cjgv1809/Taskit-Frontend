@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Dialog,
@@ -29,8 +29,7 @@ function TaskDialog() {
     titulo: "",
     descripcion: "",
   });
-  const { state, dispatch } = useProject();
-  const { loading, error, tasks, projects } = state;
+  const { dispatch } = useProject();
   const { projectId } = useParams<{ projectId: string }>();
   const projectIdNumber = Number(projectId);
 

@@ -53,7 +53,7 @@ function ProjectsView() {
   const { projectId } = useParams();
   const [notFound, setNotFound] = useState(false);
   const { state, dispatch } = useProject();
-  const { projects, loading, error } = state;
+  const { projects } = state;
   const navigate = useNavigate();
   const { userId } = useUser();
   const { openDialog } = useTaskDialog();

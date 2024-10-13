@@ -23,7 +23,7 @@ function TasksView() {
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const { state, dispatch } = useProject();
-  const { projects, loading, error, tasks } = state;
+  const { projects, tasks } = state;
   const { isDarkMode } = useTheme();
 
   console.log("TasksView state:", projects);
@@ -271,7 +271,8 @@ function TasksView() {
                   className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white last:mb-0"
                 >
                   <h3 className="text-xl font-semibold">{task.titulo}</h3>
-                  <p className="mt-2 text-gray-600">{task.descripcion}</p>
+                  Prioridad{" "}
+                  <span className="mt-2 text-gray-600">{task.prioridad}</span>
                 </div>
               ))}
             </div>

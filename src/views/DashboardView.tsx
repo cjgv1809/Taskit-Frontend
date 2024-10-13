@@ -38,7 +38,7 @@ function DashboardView() {
     descripcion: "",
   });
   const { state, dispatch } = useProject();
-  const { projects, loading, error } = state;
+  const { projects } = state;
   const { isDarkMode } = useTheme();
 
   useEffect(() => {
