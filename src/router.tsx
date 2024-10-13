@@ -46,6 +46,10 @@ const BrowserRouter = createBrowserRouter([
         children: [
           { index: true, element: <DashboardView /> },
           { path: ":projectId", element: <ProjectsView /> },
+          {
+            path: "*",
+            element: <Navigate to="/proyectos" replace />,
+          },
         ],
       },
       { path: "*", element: <NotFoundView /> },
