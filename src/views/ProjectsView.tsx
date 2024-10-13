@@ -1,18 +1,30 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { ChevronRight, LogOut, Menu, Plus } from "lucide-react";
-import axios from "axios";
-import { useAuth, useProject, useTheme, useUser } from "@/hooks";
-import { Button } from "@/components/ui/button";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Menu,
+  Plus,
+  Edit2,
+  Trash2,
+  ArrowLeft,
+  Save,
+  Ban,
+  ChevronRight,
+  LogOut,
+} from "lucide-react";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -22,51 +34,73 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useAuth, useProject, useTaskDialog, useTheme, useUser } from "@/hooks";
+import TaskDialog from "@/components/TaskDialog";
 import DarkModeSwitch from "@/components/DarkModeSwitch";
+import TaskListAccordion from "@/components/TaskListAccordion";
 import MobileNavSheet from "@/components/MobileNavSheet";
+import NotFoundView from "./NotFoundView";
 import { logout } from "@/services";
 
-function DashboardView() {
-  const { currentUser } = useAuth();
-  const { userId } = useUser();
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+function ProjectsView() {
+  const [isEditing, setIsEditing] = useState(false);
   const [projectData, setProjectData] = useState({
     nombre: "",
     descripcion: "",
   });
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const { projectId } = useParams();
+  const [notFound, setNotFound] = useState(false);
   const { state, dispatch } = useProject();
   const { projects, loading, error } = state;
+  const navigate = useNavigate();
+  const { userId } = useUser();
+  const { openDialog } = useTaskDialog();
+  const { currentUser } = useAuth();
   const { isDarkMode } = useTheme();
 
+  // get specific project by id
+  const project = projects.find((p) => p.id_proyecto === Number(projectId));
+
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchProject = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/proyectos/usuario/${userId}`
+          `${import.meta.env.VITE_API_URL}/proyectos/${projectId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
-        dispatch({ type: "FETCH_PROJECTS_SUCCESS", payload: response.data });
+        dispatch({ type: "FETCH_PROJECT_SUCCESS", payload: response.data });
       } catch (err) {
-        dispatch({ type: "SET_ERROR", payload: "Error fetching projects" });
-        console.error("Error fetching projects:", err);
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
+          setNotFound(true);
+        } else {
+          dispatch({ type: "SET_ERROR", payload: "Error fetching project" });
+          console.error("Error fetching project:", err);
+        }
       }
     };
 
-    fetchProjects();
-  }, [dispatch, userId]);
+    fetchProject();
+  }, [dispatch, projectId]);
 
-  const handleAddProject = async () => {
+  if (notFound) {
+    return <NotFoundView />;
+  }
+
+  const handleEditProject = async (projectId: number) => {
     try {
       const requestBody = {
         nombre: projectData.nombre,
         descripcion: projectData.descripcion,
-        id_usuario: userId,
       };
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/proyectos`,
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/proyectos/${projectId}`,
         requestBody,
         {
           headers: {
@@ -74,10 +108,18 @@ function DashboardView() {
           },
         }
       );
-      dispatch({ type: "ADD_PROJECT", payload: response.data });
 
-      // refetch projects
-      const newProjects = await axios.get(
+      // update project in the context
+      dispatch({
+        type: "UPDATE_PROJECT",
+        payload: {
+          ...response.data,
+          id_proyecto: projectId,
+        },
+      });
+
+      // refetch projects to update the list
+      const responseProjects = await axios.get(
         `${import.meta.env.VITE_API_URL}/proyectos/usuario/${userId}`,
         {
           headers: {
@@ -86,12 +128,33 @@ function DashboardView() {
         }
       );
 
-      dispatch({ type: "FETCH_PROJECTS_SUCCESS", payload: newProjects.data });
+      dispatch({
+        type: "FETCH_PROJECTS_SUCCESS",
+        payload: responseProjects.data,
+      });
 
-      setProjectData({ nombre: "", descripcion: "" });
+      setIsEditing(false);
     } catch (err) {
-      dispatch({ type: "SET_ERROR", payload: "Error adding project" });
-      console.error("Error adding project:", err);
+      dispatch({ type: "SET_ERROR", payload: "Error editing project" });
+      console.error("Error editing project:", err);
+    }
+  };
+
+  const handleDeleteProject = async (projectId: number) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/proyectos/${projectId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // remove project from the context
+      dispatch({ type: "DELETE_PROJECT", payload: projectId });
+    } catch (err) {
+      dispatch({ type: "SET_ERROR", payload: "Error deleting project" });
+      console.error("Error deleting project:", err);
     }
   };
 
@@ -109,9 +172,6 @@ function DashboardView() {
               className="text-gray-500 cursor-pointer dark:text-dark-primary-foreground"
             />
           </Button>
-
-          {/* Mobile Menu */}
-          <MobileNavSheet ref={mobileMenuRef} />
         </div>
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -161,24 +221,19 @@ function DashboardView() {
                     type="button"
                     variant="ghost"
                     className="flex items-center justify-between w-full px-4 py-2 text-base text-gray-600 rounded-none hover:bg-gray-100 dark:text-gray-300 hover:dark:bg-primary"
-                    onClick={() => setIsDialogOpen(true)}
                   >
                     Proyectos
-                    <Plus size={20} className="mr-2" />
                   </Button>
                   <div>
                     <ul>
                       <li>
-                        {projects.map((project) => (
-                          <Link
-                            key={project.id_proyecto}
-                            to={`/proyectos/${project.id_proyecto}`}
-                            className="flex items-center w-full p-3 ml-0.5 font-medium rounded-md hover:bg-primary dark:text-gray-300"
-                          >
-                            <ChevronRight size={18} className="mr-1" />
-                            {project.nombre}
-                          </Link>
-                        ))}
+                        <Link
+                          to="#"
+                          className="flex items-center w-full p-3 ml-0.5 font-medium rounded-md bg-primary dark:text-gray-300"
+                        >
+                          <ChevronRight size={18} className="mr-1" />
+                          {project?.nombre}
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -257,132 +312,181 @@ function DashboardView() {
           </aside>
         </div>
 
-        {/* Main Content */}
+        {/* Main content */}
         <div className="flex-[0.8] p-4 overflow-y-auto bg-primary/95 pb-20 scrollbar-thin scrollbar-thumb-primary scrollbar-track-background">
-          {/* Page Content */}
-          <main className="flex-1 p-6 overflow-y-scroll rounded-lg scrollbar-none dark:bg-secondary/50 dark:text-white">
-            <h1 className="mb-2 text-2xl font-bold">
-              Hola, {currentUser?.displayName}!
-            </h1>
-            <p className="mb-6 font-light text-gray-600">
-              {new Date().toLocaleDateString("es-ES", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => navigate("/proyectos")}
+            className="flex items-center gap-2 mb-10 text-white"
+          >
+            <ArrowLeft size={20} className="text-white" />
+            Volver a Proyectos
+          </Button>
+          <div className="flex flex-col w-full gap-2 p-4 my-4 bg-white rounded-md shadow-md dark:bg-secondary/50">
+            {isEditing ? (
+              <Input
+                type="text"
+                value={projectData.nombre}
+                placeholder="Ingrese un nombre"
+                onChange={(e) =>
+                  setProjectData((prev) => ({
+                    ...prev,
+                    nombre: e.target.value,
+                  }))
+                }
+                onKeyDown={(e) => {
+                  if (projectData.nombre === "") return;
 
-            {/* Dashboard Image */}
-            {projects?.length === 0 && (
-              <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-sm dark:bg-secondary/95">
-                <img
-                  src="images/dashboard-image.webp"
-                  alt="Dashboard Image"
-                  className="w-48 h-auto mx-auto dark:filter dark:invert"
-                />
-                <p className="mt-4 font-semibold text-center text-gray-600 dark:text-white">
-                  ¡Añade un nuevo proyecto para comenzar!
-                </p>
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="mt-4 dark:bg-primary dark:text-dark-primary-foreground"
-                  onClick={() => setIsDialogOpen(true)}
-                >
-                  <Plus size={20} className="mr-2" />
-                  Crear Proyecto
-                </Button>
-              </div>
+                  if (e.key === "Enter") {
+                    handleEditProject(Number(projectId));
+                  }
+                }}
+              />
+            ) : (
+              <>
+                <h1 className="text-2xl font-bold">
+                  {project?.nombre || "Sin nombre"}
+                </h1>
+              </>
             )}
-
             <div>
-              {projects?.map((project) => (
-                <div
-                  key={project.id_proyecto}
-                  className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white last:mb-0"
-                >
-                  <Link to={`/proyectos/${project.id_proyecto}`}>
-                    <h2 className="text-xl font-semibold">{project.nombre}</h2>
-                  </Link>
-                  <p className="mt-2 text-gray-600">{project.descripcion}</p>
-                </div>
-              ))}
+              <>
+                {isEditing ? (
+                  <Input
+                    type="text"
+                    value={projectData.descripcion}
+                    placeholder="Ingrese una descripción"
+                    onChange={(e) =>
+                      setProjectData((prev) => ({
+                        ...prev,
+                        descripcion: e.target.value,
+                      }))
+                    }
+                    onKeyDown={(e) => {
+                      if (projectData.descripcion === "") return;
+
+                      if (e.key === "Enter") {
+                        handleEditProject(Number(projectId));
+                      }
+                    }}
+                  />
+                ) : (
+                  <p className="text-gray-500">
+                    {project?.descripcion || "Sin descripción"}
+                  </p>
+                )}
+              </>
+              <div className="flex items-start justify-end gap-2 my-4">
+                {!isEditing ? (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      title="Editar Proyecto"
+                      onClick={() => setIsEditing(!isEditing)}
+                      className="flex gap-2 text-white"
+                    >
+                      <Edit2 size={16} className="text-white" />
+                      Editar Proyecto
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      title="Eliminar Proyecto"
+                      onClick={() => setIsDeleteDialogOpen(true)}
+                      className="flex gap-2 text-white"
+                    >
+                      <Trash2 size={16} className="text-white" />
+                      Eliminar Proyecto
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      title="Guardar Cambios"
+                      onClick={() => handleEditProject(Number(projectId))}
+                      className="flex gap-2 text-white"
+                    >
+                      <Save size={16} className="text-white" />
+                      Guardar Cambios
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      title="Cancelar"
+                      onClick={() => setIsEditing(!isEditing)}
+                      className="flex gap-2 text-white"
+                    >
+                      <Ban size={16} className="text-white" />
+                      Cancelar
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
-          </main>
+
+            <div className="w-full">
+              <Button
+                variant="default"
+                size="lg"
+                className="flex items-center w-full gap-2 dark:bg-primary dark:text-white"
+                onClick={() => openDialog()}
+              >
+                <Plus size={20} className="mr-2" />
+                Añadir Tarea
+              </Button>
+            </div>
+          </div>
+          {/* Show tasks */}
+          <TaskListAccordion />
         </div>
       </div>
 
-      {/* Dialog to add a new project */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
+      {/* Mobile Menu */}
+      <MobileNavSheet ref={mobileMenuRef} />
+
+      {/* Delete Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogTrigger>
           <div className="hidden"></div>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Crear nuevo proyecto</DialogTitle>
-            <DialogDescription>
-              Añade un nuevo proyecto a tu lista
-            </DialogDescription>
-          </DialogHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleAddProject();
-            }}
-          >
-            <div className="grid gap-4">
-              <div>
-                <Label htmlFor="name" className="sr-only">
-                  Nombre
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Ingresa un nombre"
-                  name="name"
-                  value={projectData.nombre}
-                  onChange={(e) =>
-                    setProjectData({ ...projectData, nombre: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label htmlFor="descripcion" className="sr-only">
-                  Descripción
-                </Label>
-                <Input
-                  id="descripcion"
-                  type="text"
-                  placeholder="Ingresa una descripción"
-                  name="descripcion"
-                  value={projectData.descripcion}
-                  onChange={(e) =>
-                    setProjectData({
-                      ...projectData,
-                      descripcion: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <DialogFooter>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsDialogOpen(false)}
-                >
-                  Cancelar
-                </Button>
-                <Button type="submit" onClick={() => setIsDialogOpen(false)}>
-                  Crear Proyecto
-                </Button>
-              </DialogFooter>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              ¿Estás seguro de que quieres eliminar este proyecto?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Al eliminar el proyecto, se
+              borrarán todos los datos asociados.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                handleDeleteProject(Number(projectId));
+                setIsDeleteDialogOpen(false);
+                navigate("/proyectos");
+              }}
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Task Dialog to create a new task */}
+      <TaskDialog />
     </div>
   );
 }
 
-export default DashboardView;
+export default ProjectsView;

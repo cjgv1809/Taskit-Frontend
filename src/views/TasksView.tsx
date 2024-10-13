@@ -1,18 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { ChevronRight, LogOut, Menu, Plus } from "lucide-react";
-import axios from "axios";
+import { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, ArrowLeft, ChevronRight, LogOut } from "lucide-react";
 import { useAuth, useProject, useTheme, useUser } from "@/hooks";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -22,30 +12,56 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import DarkModeSwitch from "@/components/DarkModeSwitch";
 import MobileNavSheet from "@/components/MobileNavSheet";
 import { logout } from "@/services";
+import axios from "axios";
 
-function DashboardView() {
+function TasksView() {
   const { currentUser } = useAuth();
   const { userId } = useUser();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [projectData, setProjectData] = useState({
-    nombre: "",
-    descripcion: "",
-  });
+  const navigate = useNavigate();
   const { state, dispatch } = useProject();
-  const { projects, loading, error } = state;
+  const { projects, loading, error, tasks } = state;
   const { isDarkMode } = useTheme();
+
+  console.log("TasksView state:", projects);
+
+  useEffect(() => {
+    const fetchAllTasks = async () => {
+      try {
+        const response = await axios.get(
+          `${
+            import.meta.env.VITE_API_URL
+          }/tareas/usuario/${userId}/finalizadas`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log("fetchAllTasks response:", response.data);
+        dispatch({ type: "FETCH_ALL_TASKS_SUCCESS", payload: response.data });
+      } catch (err) {
+        dispatch({ type: "SET_ERROR", payload: "Error fetching all tasks" });
+        console.error("Error fetching tasks:", err);
+      }
+    };
+
+    fetchAllTasks();
+  }, [dispatch, userId]);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/proyectos/usuario/${userId}`
+          `${import.meta.env.VITE_API_URL}/proyectos/usuario/${userId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
         dispatch({ type: "FETCH_PROJECTS_SUCCESS", payload: response.data });
       } catch (err) {
@@ -56,44 +72,6 @@ function DashboardView() {
 
     fetchProjects();
   }, [dispatch, userId]);
-
-  const handleAddProject = async () => {
-    try {
-      const requestBody = {
-        nombre: projectData.nombre,
-        descripcion: projectData.descripcion,
-        id_usuario: userId,
-      };
-
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/proyectos`,
-        requestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      dispatch({ type: "ADD_PROJECT", payload: response.data });
-
-      // refetch projects
-      const newProjects = await axios.get(
-        `${import.meta.env.VITE_API_URL}/proyectos/usuario/${userId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      dispatch({ type: "FETCH_PROJECTS_SUCCESS", payload: newProjects.data });
-
-      setProjectData({ nombre: "", descripcion: "" });
-    } catch (err) {
-      dispatch({ type: "SET_ERROR", payload: "Error adding project" });
-      console.error("Error adding project:", err);
-    }
-  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -161,10 +139,8 @@ function DashboardView() {
                     type="button"
                     variant="ghost"
                     className="flex items-center justify-between w-full px-4 py-2 text-base text-gray-600 rounded-none hover:bg-gray-100 dark:text-gray-300 hover:dark:bg-primary"
-                    onClick={() => setIsDialogOpen(true)}
                   >
                     Proyectos
-                    <Plus size={20} className="mr-2" />
                   </Button>
                   <div>
                     <ul>
@@ -260,6 +236,15 @@ function DashboardView() {
         {/* Main Content */}
         <div className="flex-[0.8] p-4 overflow-y-auto bg-primary/95 pb-20 scrollbar-thin scrollbar-thumb-primary scrollbar-track-background">
           {/* Page Content */}
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => navigate("/proyectos")}
+            className="flex items-center gap-2 mb-10 text-white"
+          >
+            <ArrowLeft size={20} className="text-white" />
+            Volver a Proyectos
+          </Button>
           <main className="flex-1 p-6 overflow-y-scroll rounded-lg scrollbar-none dark:bg-secondary/50 dark:text-white">
             <h1 className="mb-2 text-2xl font-bold">
               Hola, {currentUser?.displayName}!
@@ -273,116 +258,28 @@ function DashboardView() {
               })}
             </p>
 
-            {/* Dashboard Image */}
-            {projects?.length === 0 && (
-              <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-sm dark:bg-secondary/95">
-                <img
-                  src="images/dashboard-image.webp"
-                  alt="Dashboard Image"
-                  className="w-48 h-auto mx-auto dark:filter dark:invert"
-                />
-                <p className="mt-4 font-semibold text-center text-gray-600 dark:text-white">
-                  ¡Añade un nuevo proyecto para comenzar!
-                </p>
-                <Button
-                  variant="default"
-                  size="lg"
-                  className="mt-4 dark:bg-primary dark:text-dark-primary-foreground"
-                  onClick={() => setIsDialogOpen(true)}
-                >
-                  <Plus size={20} className="mr-2" />
-                  Crear Proyecto
-                </Button>
-              </div>
-            )}
-
             <div>
-              {projects?.map((project) => (
+              <h2 className="mb-4 text-xl font-semibold">
+                Tareas completadas{" "}
+                <span className="font-normal text-gray-600">
+                  ({tasks?.length || 0})
+                </span>
+              </h2>
+              {tasks?.map((task) => (
                 <div
-                  key={project.id_proyecto}
+                  key={task.id_tarea}
                   className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white last:mb-0"
                 >
-                  <Link to={`/proyectos/${project.id_proyecto}`}>
-                    <h2 className="text-xl font-semibold">{project.nombre}</h2>
-                  </Link>
-                  <p className="mt-2 text-gray-600">{project.descripcion}</p>
+                  <h3 className="text-xl font-semibold">{task.titulo}</h3>
+                  <p className="mt-2 text-gray-600">{task.descripcion}</p>
                 </div>
               ))}
             </div>
           </main>
         </div>
       </div>
-
-      {/* Dialog to add a new project */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <div className="hidden"></div>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Crear nuevo proyecto</DialogTitle>
-            <DialogDescription>
-              Añade un nuevo proyecto a tu lista
-            </DialogDescription>
-          </DialogHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleAddProject();
-            }}
-          >
-            <div className="grid gap-4">
-              <div>
-                <Label htmlFor="name" className="sr-only">
-                  Nombre
-                </Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Ingresa un nombre"
-                  name="name"
-                  value={projectData.nombre}
-                  onChange={(e) =>
-                    setProjectData({ ...projectData, nombre: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label htmlFor="descripcion" className="sr-only">
-                  Descripción
-                </Label>
-                <Input
-                  id="descripcion"
-                  type="text"
-                  placeholder="Ingresa una descripción"
-                  name="descripcion"
-                  value={projectData.descripcion}
-                  onChange={(e) =>
-                    setProjectData({
-                      ...projectData,
-                      descripcion: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <DialogFooter>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsDialogOpen(false)}
-                >
-                  Cancelar
-                </Button>
-                <Button type="submit" onClick={() => setIsDialogOpen(false)}>
-                  Crear Proyecto
-                </Button>
-              </DialogFooter>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
 
-export default DashboardView;
+export default TasksView;
