@@ -13,7 +13,7 @@ function DarkModeSwitch() {
         onCheckedChange={toggleTheme}
         className="dark:bg-white"
       />
-      <div className="flex items-center ml-3">
+      <div className="flex items-center">
         {isDarkMode ? (
           <Sun size={24} className="text-accent" />
         ) : (

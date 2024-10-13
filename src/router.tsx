@@ -8,6 +8,7 @@ import RegisterView from "./views/RegisterView";
 import NotFoundView from "./views/NotFoundView";
 import DashboardView from "./views/DashboardView";
 import ProjectsView from "./views/ProjectsView";
+import TasksView from "./views/TasksView";
 import ErrorView from "./views/ErrorView";
 import { useVerifySignedInUser } from "./hooks/useVerifySignedInUser";
 
@@ -46,6 +47,7 @@ const BrowserRouter = createBrowserRouter([
         children: [
           { index: true, element: <DashboardView /> },
           { path: ":projectId", element: <ProjectsView /> },
+          { path: "tareas", element: <TasksView /> },
           {
             path: "*",
             element: <Navigate to="/proyectos" replace />,
