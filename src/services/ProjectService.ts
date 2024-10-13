@@ -3,18 +3,18 @@ import axios from "axios";
 interface Project {
   nombre: string;
   descripcion: string;
-  id_usuario: number;
-}
-
-interface ProjectResponse {
-  id_proyecto: number;
-  message: string;
 }
 
 const createProject = async (
-  projectData: Project
-): Promise<ProjectResponse> => {
+  nombre: string,
+  descripcion: string,
+) => {
   try {
+    const projectData: Project = {
+      nombre,
+      descripcion,
+    };
+
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/proyectos`,
       projectData,
@@ -30,7 +30,7 @@ const createProject = async (
     }
 
     const { id_proyecto, message } = response.data;
-    
+
     console.log(id_proyecto);
     console.log(message);
 

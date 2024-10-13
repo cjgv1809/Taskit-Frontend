@@ -12,12 +12,11 @@ import {
   deleteProject,
 } from "./ProjectService";
 import {
-  createCategory,
-  updateCategory,
-  deleteCategory,
-  getCategoriesByProjectId,
-  getCategoryByProjectId,
-} from "./CategoryService";
+  createTask,
+  getTasksByProjectId,
+  updateTask,
+  deleteTask,
+} from "./TaskService";
 
 export {
   registerWithEmailAndPassword,
@@ -29,9 +28,8 @@ export {
   getProjectsByUser,
   updateProject,
   deleteProject,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-  getCategoriesByProjectId,
-  getCategoryByProjectId,
+  createTask,
+  getTasksByProjectId,
+  updateTask,
+  deleteTask,
 };

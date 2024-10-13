@@ -45,6 +45,7 @@ export type Action =
   | { type: "FETCH_PROJECT_SUCCESS"; payload: Project }
   | { type: "FETCH_PROJECTS_SUCCESS"; payload: Project[] }
   | { type: "FETCH_TASKS_SUCCESS"; payload: Task[] }
+  | { type: "FETCH_ALL_TASKS_SUCCESS"; payload: Task[] }
   | { type: "ADD_PROJECT"; payload: Project }
   | { type: "ADD_TASK"; payload: Task }
   | { type: "UPDATE_PROJECT"; payload: Project }
@@ -62,6 +63,6 @@ export enum PriorityEnum {
 
 export enum StatusEnum {
   PorHacer = "Por hacer",
-  EnCurso = "En curso",
+  EnProceso = "En proceso",
   Finalizado = "Finalizado",
 }

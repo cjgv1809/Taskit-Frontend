@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const createTask = async (
-  categoryId: number,
+  projectId: number,
   title: string,
   description: string,
   status: string,
@@ -9,7 +9,7 @@ const createTask = async (
 ) => {
   try {
     const task = {
-      id_categoria: categoryId,
+      id_categoria: projectId,
       titulo: title,
       descripcion: description,
       estado: status,
@@ -32,10 +32,10 @@ const createTask = async (
   }
 };
 
-const getTasksByCategoryId = async (categoryId: number) => {
+const getTasksByProjectId = async (projectId: number) => {
   try {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/tareas/categoria/${categoryId}`,
+      `${import.meta.env.VITE_API_URL}/tareas/proyecto/${projectId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ const getAllCompletedTasks = async (userId: number) => {
 
 export {
   createTask,
-  getTasksByCategoryId,
+  getTasksByProjectId,
   getTaskById,
   updateTask,
   deleteTask,
