@@ -47,7 +47,6 @@ function TasksView() {
             },
           }
         );
-        console.log("fetchAllTasks response:", response.data);
         dispatch({ type: "FETCH_ALL_TASKS_SUCCESS", payload: response.data });
       } catch (err) {
         dispatch({ type: "SET_ERROR", payload: "Error fetching all tasks" });
@@ -90,7 +89,7 @@ function TasksView() {
           >
             <Menu
               size={24}
-              className="text-gray-500 cursor-pointer dark:text-dark-primary-foreground"
+              className="block text-gray-500 cursor-pointer dark:text-dark-primary-foreground md:hidden"
             />
           </Button>
 
@@ -133,7 +132,7 @@ function TasksView() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="flex-[0.2] flex flex-col h-full bg-white border-r border-gray-200 dark:border-border">
+        <div className="hidden md:flex md:flex-[0.2] flex-col h-full bg-white border-r border-gray-200 dark:border-border">
           <aside className="flex flex-col h-full overflow-y-auto bg-white dark:bg-secondary dark:text-white dark:border-border">
             <nav className="flex-grow mt-4 overflow-y-auto scrollbar-none">
               <ul>
@@ -245,7 +244,7 @@ function TasksView() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-[0.8] p-4 overflow-y-auto bg-primary/95 pb-20 scrollbar-thin scrollbar-thumb-primary scrollbar-track-background">
+        <div className="md:flex-[0.8] flex-1 p-4 overflow-y-auto bg-primary/95 pb-20 scrollbar-thin scrollbar-thumb-primary scrollbar-track-background">
           {/* Page Content */}
           <Button
             variant="secondary"
@@ -269,57 +268,54 @@ function TasksView() {
               })}
             </p>
 
-            {tasks?.length === 0 && (
+            {tasks?.length === 0 ? (
               <div className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white">
-                <h3 className="text-xl font-bold">No hay tareas completadas</h3>
+                <h3 className="text-xl font-bold text-center">
+                  No hay tareas completadas
+                </h3>
               </div>
+            ) : (
+              <h2 className="mb-4 text-xl font-semibold">
+                Tareas completadas{" "}
+                <span className="font-normal text-gray-600">
+                  ({tasks?.length || 0})
+                </span>
+              </h2>
             )}
 
             {/* Show Tasks */}
             <div>
               {tasks?.length > 0 &&
                 tasks?.map((task) => (
-                  <>
-                    <h2 className="mb-4 text-xl font-semibold">
-                      Tareas completadas{" "}
-                      <span className="font-normal text-gray-600">
-                        ({tasks?.length || 0})
-                      </span>
-                    </h2>
-                    <div
-                      key={task.id_tarea}
-                      className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white last:mb-0"
-                    >
-                      <h3 className="text-xl font-bold">{task.titulo}</h3>
-                      <p className="mt-2 text-gray-600 dark:text-gray-400">
-                        <span className="font-semibold">Estado:</span>{" "}
-                        <span className="dark:text-accent2 text-accent">
-                          Completada
+                  <div
+                    key={task.id_tarea}
+                    className="p-4 mb-6 bg-white rounded-lg shadow-sm dark:bg-secondary dark:text-white last:mb-0"
+                  >
+                    <h3 className="text-xl font-bold">{task.titulo}</h3>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold">Estado:</span>{" "}
+                      <span className="text-accent2">Completada</span>
+                    </p>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold">Prioridad:</span>{" "}
+                      {task.prioridad === "Alta" ? (
+                        <span className="text-red-500">{task.prioridad}</span>
+                      ) : task.prioridad === "Media" ? (
+                        <span className="text-yellow-500">
+                          {task.prioridad}
                         </span>
-                      </p>
-                      <p className="mt-2 text-gray-600 dark:text-gray-400">
-                        <span className="font-semibold">Prioridad:</span>{" "}
-                        {task.prioridad === "Alta" ? (
-                          <span className="text-red-500">{task.prioridad}</span>
-                        ) : task.prioridad === "Media" ? (
-                          <span className="text-yellow-500">
-                            {task.prioridad}
-                          </span>
-                        ) : (
-                          <span className="text-green-500">
-                            {task.prioridad}
-                          </span>
-                        )}
-                      </p>
-                      <p className="mt-2 text-gray-600 dark:text-gray-400">
-                        {task.descripcion || ""}
-                      </p>
-                      <p className="mt-2 text-gray-600 dark:text-gray-400">
-                        <span className="font-semibold">Proyecto:</span>{" "}
-                        {findProjectName(task.id_proyecto)}
-                      </p>
-                    </div>
-                  </>
+                      ) : (
+                        <span className="text-green-500">{task.prioridad}</span>
+                      )}
+                    </p>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
+                      {task.descripcion || ""}
+                    </p>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold">Proyecto:</span>{" "}
+                      {findProjectName(task.id_proyecto)}
+                    </p>
+                  </div>
                 ))}
             </div>
           </main>

@@ -163,8 +163,8 @@ function SignInView() {
             />
           </svg>
         </div>
-        <div className="flex flex-col items-center justify-center p-4 flex-1 lg:flex-[0.5] lg:p-9 dark:bg-primary h-full">
-          <h1 className="text-4xl font-bold text-center md:text-6xl text-typography dark:text-dark-primary">
+        <div className="flex flex-col items-center justify-center px-10 py-20 flex-1 lg:flex-[0.5] dark:bg-primary h-full">
+          <h1 className="text-4xl font-bold text-center md:text-5xl text-typography dark:text-dark-primary">
             Iniciar Sesión
           </h1>
           <form

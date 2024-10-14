@@ -8,17 +8,9 @@ export function useAuth() {
   const [internalUser, setInternalUser] = useState<User | null>(null);
 
   useEffect(() => {
-    console.log("useAuth effect triggered", {
-      contextUser: context?.currentUser,
-      contextLoading: context?.loading,
-    });
     if (context && !context.loading) {
       setInternalUser(context.currentUser as User | null);
       setInternalLoading(false);
-      console.log("useAuth updated state", {
-        user: context.currentUser,
-        loading: false,
-      });
     }
   }, [context]);
 

@@ -106,7 +106,7 @@ function DashboardView() {
           >
             <Menu
               size={24}
-              className="text-gray-500 cursor-pointer dark:text-dark-primary-foreground"
+              className="block text-gray-500 cursor-pointer dark:text-dark-primary-foreground md:hidden"
             />
           </Button>
 
@@ -149,7 +149,7 @@ function DashboardView() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <div className="flex-[0.2] flex flex-col h-full bg-white border-r border-gray-200 dark:border-border">
+        <div className="hidden md:flex md:flex-[0.2] flex-col h-full bg-white border-r border-gray-200 dark:border-border">
           <aside className="flex flex-col h-full overflow-y-auto bg-white dark:bg-secondary dark:text-white dark:border-border">
             <nav className="flex-grow mt-4 overflow-y-auto scrollbar-none">
               <ul>
@@ -263,7 +263,7 @@ function DashboardView() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-[0.8] p-4 overflow-y-auto bg-primary/95 pb-20 scrollbar-thin scrollbar-thumb-primary scrollbar-track-background">
+        <div className="md:flex-[0.8] flex-1 p-4 overflow-y-auto bg-primary/95 pb-20 scrollbar-thin scrollbar-thumb-primary scrollbar-track-background">
           {/* Page Content */}
           <main className="flex-1 p-6 overflow-y-scroll rounded-lg scrollbar-none dark:bg-secondary/50 dark:text-white">
             <h1 className="mb-2 text-2xl font-bold">
