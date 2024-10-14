@@ -4,7 +4,7 @@ function MiddleSection() {
   const { isDarkMode } = useTheme();
 
   return (
-    <section className="px-4 py-16 bg-primary">
+    <section className="px-4 py-16 lg:p-32 bg-primary">
       <div className="container flex flex-col items-center mx-auto text-center">
         <div className="text-center">
           <h2 className="mb-4 text-4xl font-bold md:text-6xl text-secondary dark:text-primary-foreground">

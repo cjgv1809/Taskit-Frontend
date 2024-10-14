@@ -12,8 +12,8 @@ import {
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { useProject, useTaskDialog } from "@/hooks";
 import { Badge } from "./ui/badge";
+import { useProject, useTaskDialog } from "@/hooks";
 import { PriorityEnum, StatusEnum } from "@/types";
 import axios from "axios";
 

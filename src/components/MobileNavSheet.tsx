@@ -5,7 +5,6 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -24,7 +23,7 @@ const MobileNavSheet = forwardRef<HTMLDivElement>((_, ref) => {
       <SheetTrigger>
         <div ref={ref} className="hidden"></div>
       </SheetTrigger>
-      <SheetContent side="left">
+      <SheetContent side="left" className="flex flex-col h-full">
         <SheetHeader>
           <SheetTitle>
             <svg
@@ -70,61 +69,61 @@ const MobileNavSheet = forwardRef<HTMLDivElement>((_, ref) => {
               />
             </svg>
           </SheetTitle>
-          <SheetDescription asChild>
-            <div className="flex flex-col items-start gap-2 my-10" role="menu">
-              <ul className="flex flex-col w-full">
-                <li className="w-full p-3 border-b rounded-md hover:bg-primary">
-                  <Link
-                    to="/proyectos"
-                    className="font-semibold text-primary-foreground"
-                  >
-                    Inicio
-                  </Link>
-                </li>
-                <li className="w-full p-3 border-b rounded-md hover:bg-primary">
-                  <Link
-                    to="/proyectos"
-                    className="font-semibold text-primary-foreground"
-                  >
-                    Proyectos
-                  </Link>
-                </li>
-                <ul>
-                  {projects.map((project, index) => (
-                    <li key={`project-${index}`}>
-                      <Link
-                        to={`/proyectos/${project.id_proyecto}`}
-                        className="flex items-center w-full p-3 ml-1 font-medium rounded-md hover:bg-primary"
-                      >
-                        <ChevronRight size={16} className="mr-2" />
-                        {project.nombre}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <li className="w-full p-3 border-b rounded-md hover:bg-primary">
-                  <Link
-                    to="/proyectos/tareas"
-                    className="font-semibold text-primary-foreground"
-                  >
-                    Tareas
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </SheetDescription>
         </SheetHeader>
-        <SheetFooter>
+        <SheetDescription asChild>
+          <div className="flex flex-col items-start gap-2 my-10" role="menu">
+            <ul className="flex flex-col w-full">
+              <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                <Link
+                  to="/proyectos"
+                  className="font-semibold text-primary-foreground"
+                >
+                  Inicio
+                </Link>
+              </li>
+              <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                <Link
+                  to="/proyectos"
+                  className="font-semibold text-primary-foreground"
+                >
+                  Proyectos
+                </Link>
+              </li>
+              <ul>
+                {projects.map((project, index) => (
+                  <li key={`project-${index}`}>
+                    <Link
+                      to={`/proyectos/${project.id_proyecto}`}
+                      className="flex items-center w-full p-3 ml-1 font-medium rounded-md hover:bg-primary"
+                    >
+                      <ChevronRight size={16} className="mr-2" />
+                      {project.nombre}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <li className="w-full p-3 border-b rounded-md hover:bg-primary">
+                <Link
+                  to="/proyectos/tareas"
+                  className="font-semibold text-primary-foreground"
+                >
+                  Tareas
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </SheetDescription>
+        <div className="mt-auto">
           <Button
-            variant="ghost"
+            variant="default"
             size="lg"
-            className="mt-auto font-medium text-red-600 bg-red-100"
+            className="w-full font-medium"
             onClick={logout}
           >
             <LogOut size={20} className="mr-2" />
             Cerrar Sesión
           </Button>
-        </SheetFooter>
+        </div>
       </SheetContent>
     </Sheet>
   );

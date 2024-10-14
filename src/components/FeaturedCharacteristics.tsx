@@ -322,7 +322,7 @@ function FeaturedCharacteristics() {
   ];
 
   return (
-    <section className="px-4 py-16 bg-accent dark:bg-dark-primary">
+    <section className="px-4 py-16 lg:p-32 bg-accent dark:bg-dark-primary">
       <div className="container mx-auto">
         <h2 className="mb-10 text-4xl font-bold text-center text-white md:text-6xl">
           Características Destacadas
@@ -333,7 +333,9 @@ function FeaturedCharacteristics() {
               key={feature.id}
               className="p-6 shadow-md bg-primary text-typography rounded-4xl dark:text-dark-primary-foreground"
             >
-              <div className="flex justify-center mx-auto">{feature.icon}</div>
+              <div className="flex justify-center mx-auto mb-4">
+                {feature.icon}
+              </div>
               <h3 className="mb-2 text-2xl font-semibold text-center">
                 {feature.title}
               </h3>

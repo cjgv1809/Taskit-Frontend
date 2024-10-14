@@ -230,10 +230,14 @@ function TaskListAccordion() {
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger>
-                                  {showIconsAccordingToPriority(task.prioridad)}
+                                  <div>
+                                    {showIconsAccordingToPriority(
+                                      task.prioridad
+                                    )}
+                                  </div>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                  {task.prioridad}
+                                  Prioridad {task.prioridad}
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>

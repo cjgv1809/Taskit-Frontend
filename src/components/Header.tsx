@@ -20,12 +20,12 @@ function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full mx-auto bg-white border-b px-9 py-4 xl:max-w-[1400px] 2xl:max-w-full dark:bg-primary dark:border-border">
-      <div className="flex items-center justify-between">
-        <div className="mx-auto md:mx-0">
+    <header className="sticky top-0 z-50 w-full mx-auto bg-white border-b lg:px-32 p-4 xl:max-w-[1400px] 2xl:max-w-full dark:bg-primary dark:border-border">
+      <div className="flex flex-wrap items-center justify-between gap-4 lg:flex-nowrap">
+        <div className="flex justify-between w-full">
           <Link to="/">
             <svg
-              className="h-auto w-44"
+              className="w-20 h-auto lg:w-44"
               viewBox="0 0 276 89"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -67,18 +67,16 @@ function Header() {
               />
             </svg>
           </Link>
+          <div className="flex items-center gap-3">
+            <DarkModeSwitch />
+          </div>
         </div>
-        <div className="items-center hidden gap-4 md:flex">
-          <DarkModeSwitch />
+        <div className="flex items-center gap-4">
           {isAuthenticated &&
           (currentPath === "/" ||
             currentPath === "/sign-up" ||
             currentPath === "/sign-in") ? (
-            <Button
-              variant="default"
-              size="lg"
-              asChild
-            >
+            <Button variant="default" size="lg" asChild>
               <Link to="/proyectos">Ir a Proyectos</Link>
             </Button>
           ) : !isAuthenticated &&
@@ -86,10 +84,20 @@ function Header() {
               currentPath === "/sign-up" ||
               currentPath === "/sign-in") ? (
             <>
-              <Button variant="outline" size="lg" asChild>
+              <Button
+                variant="outline"
+                size="lg"
+                className="dark:bg-secondary dark:text-dark-primary-foreground"
+                asChild
+              >
                 <Link to="/sign-in">Iniciar Sesión</Link>
               </Button>
-              <Button variant="default" size="lg" asChild>
+              <Button
+                variant="default"
+                size="lg"
+                className="dark:bg-primary dark:text-dark-secondary-foreground"
+                asChild
+              >
                 <Link to="/sign-up">Registrarse</Link>
               </Button>
             </>

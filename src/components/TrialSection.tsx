@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 
 function TrialSection() {
   return (
-    <section className="px-4 py-16 text-white bg-secondary dark:bg-primary dark:text-dark-primary-foreground">
+    <section className="px-4 py-16 text-white lg:p-32 bg-secondary dark:bg-primary dark:text-dark-primary-foreground">
       <div className="container flex flex-col items-center justify-between gap-8 mx-auto md:flex-row">
         <div className="text-center">
           <h2 className="mb-6 text-5xl font-bold md:text-7xl text-balance">
@@ -12,7 +12,11 @@ function TrialSection() {
           <p className="mb-8 text-lg font-semibold md:text-2xl text-pretty">
             Comienza gratis. No se requiere tarjeta de crédito.
           </p>
-          <Button variant="default" size="lg">
+          <Button
+            variant="default"
+            size="lg"
+            className="dark:bg-secondary dark:text-dark-primary-foreground"
+          >
             Probar Taskit
           </Button>
           <div className="flex items-center justify-center mt-8 space-x-4">
