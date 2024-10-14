@@ -357,30 +357,30 @@ function ProjectsView() {
             )}
             <div>
               <>
-                {isEditing ? (
-                  <Input
-                    type="text"
-                    value={projectData.descripcion}
-                    placeholder="Ingrese una descripción"
-                    onChange={(e) =>
-                      setProjectData((prev) => ({
-                        ...prev,
-                        descripcion: e.target.value,
-                      }))
-                    }
-                    onKeyDown={(e) => {
-                      if (projectData.descripcion === "") return;
+                <p className="text-gray-500">
+                  {project?.descripcion || "Sin descripción"}
+                </p>
+                {/* {isEditing ? ( */}
+                {/* // <Input
+                  //   type="text"
+                  //   value={projectData.descripcion}
+                  //   placeholder="Ingrese una descripción"
+                  //   onChange={(e) =>
+                  //     setProjectData((prev) => ({
+                  //       ...prev,
+                  //       descripcion: e.target.value,
+                  //     }))
+                  //   }
+                  //   onKeyDown={(e) => {
+                  //     if (projectData.descripcion === "") return;
 
-                      if (e.key === "Enter") {
-                        handleEditProject(Number(projectId));
-                      }
-                    }}
-                  />
-                ) : (
-                  <p className="text-gray-500">
-                    {project?.descripcion || "Sin descripción"}
-                  </p>
-                )}
+                  //     if (e.key === "Enter") {
+                  //       handleEditProject(Number(projectId));
+                  //     }
+                  //   }}
+                  // />
+                  // ) : (
+                // )} */}
               </>
               <div className="flex items-start justify-end gap-2 my-4">
                 {!isEditing ? (
